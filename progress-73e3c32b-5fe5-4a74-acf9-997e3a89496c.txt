@@ -1,0 +1,29 @@
+# Progress Log
+Run: 73e3c32b-5fe5-4a74-acf9-997e3a89496c
+Task: DurbinDash: systemd service + deployment
+Started: 2026-02-28
+
+## Codebase Patterns
+- Plain Node.js app, no build step, `npm start` runs the server
+- Tests live in tests/ directory; shell tests use .test.sh naming
+- Service file lives at project root (durbindash.service)
+- Branch: feature/systemd-deployment
+
+---
+
+## 2026-02-28 - US-001: Create systemd service file for DurbinDash
+- Created durbindash.service with all required fields
+- Created tests/service-file.test.sh with 9 assertions (all pass)
+- systemd-analyze verify reports no errors
+- Files changed: durbindash.service, tests/service-file.test.sh
+- **Learnings:** systemd-analyze verify works on unit files in any path
+---
+
+## 2026-02-28 retry - US-001: Create systemd service file for DurbinDash
+- Created durbindash.service with all required systemd fields
+- Created tests/service-file.test.sh with 9 assertions (all pass)
+- systemd-analyze verify confirms valid unit syntax
+- Committed to feature/systemd-deployment branch (commit 2d72e3c)
+- Files changed: durbindash.service, tests/service-file.test.sh
+- **Learnings:** Use git branch --show-current to verify branch before committing; avoid set -e with arithmetic in bash tests
+---

@@ -1,0 +1,99 @@
+# Progress Log
+Run: 30bd3427-effe-4638-bb1b-27f633538afe
+Task: DurbinDash: News aggregator API — server/news.js with RSS feeds, caching, and frontend rendering
+Started: 2026-02-28
+
+## Codebase Patterns
+- Plain CommonJS Node.js/Express project (no transpile/build step needed)
+- Tests use Jest (installed as devDependency), run with `npm test`
+- Tests live in tests/ directory as *.test.js files
+- node --check works for typecheck on server.js
+- `npm install` is the only build step needed
+
+---
+
+## 2026-02-28 - US-001: Add Jest test infrastructure and npm scripts
+- Installed jest as devDependency
+- Added "test": "jest" and "test:watch": "jest --watch" to package.json scripts
+- Created tests/placeholder.test.js with 3 passing tests verifying Jest/CommonJS works
+- Confirmed node --check server.js passes
+- **Learnings:** Project is pure CommonJS, jest works out-of-the-box with no transform config
+---
+
+## 2026-02-28 - US-002: Create server/news.js RSS feed fetcher with normalized output
+- Created server/ directory and server/news.js
+- Implemented fetchFeed(category) async function for ai, tech, hn categories
+- Used rss-parser with 10s AbortController timeout per fetch
+- tech category merges Ars Technica + The Verge, sorts by date desc, returns top 5
+- Unknown category returns empty array
+- Created tests/news.fetch.test.js with 8 tests (all passing), mocking rss-parser
+- node --check server/news.js passes
+- **Learnings:** Jest mock must be set up before require(); use jest.mock() at top of file
+---
+
+## 2026-02-28 (retry) - US-002: Create server/news.js RSS feed fetcher with normalized output
+- Prior session committed to wrong branch (feature/weather-api); re-implemented on feature/news-aggregator-api
+- Created server/news.js with fetchFeed(category) for ai, tech, hn
+- tech category merges Ars Technica + The Verge, sorts by date desc, top 5
+- 10s AbortController timeout per fetch
+- Created tests/news.fetch.test.js — 8 tests, all passing (rss-parser mocked)
+- node --check server/news.js passes
+- Commit: 0f5b002
+- **Learnings:** Always verify current branch before committing; cherry-pick won't work if content already exists elsewhere
+---
+
+## 2026-02-28 - US-003: Add 30-minute in-memory cache to server/news.js
+- Added `const cache = new Map()` and `CACHE_TTL = 1800000` to server/news.js
+- fetchFeed() checks cache before fetching; stores { data, fetchedAt } on miss
+- Exported clearCache() and getCacheAge(category) helpers
+- Created tests/news.cache.test.js: 5 tests, all passing
+- node --check server/news.js passes
+- Commit: c825ab6
+- **Learnings:** Always verify current branch BEFORE git add/commit; `git branch --show-current` is safer than `git branch`. Shell heredoc `cat > file << EOF` may not work reliably — use python3 to write files instead.
+---
+
+## 2026-02-28 - US-004: Wire GET /api/news?category= endpoint in server.js
+- Added require('./server/news') and VALID_CATEGORIES const to server.js
+- Added app.get('/api/news', handler): 400 on missing/invalid category, 502 on fetchFeed error, 200 JSON array on success
+- Installed supertest as devDependency
+- Created tests/news.route.test.js: 6 tests covering all acceptance criteria (mock both server/news and server/weather)
+- All 24 tests pass (5 test suites)
+- node --check server.js passes
+- Commit: 4be382a on feature/news-aggregator-api
+- **Learnings:** When requiring server.js in tests, must mock ALL side-effect requiring modules (including server/weather which uses node-fetch ESM). git branch switching can be unreliable in this env — always verify with git branch --show-current after checkout.
+---
+
+## 2026-02-28 - US-005: Create public/js/news.js frontend fetch and render module
+- Created public/js/news.js: plain JS, no bundler, exports fetchAndRenderNews(category, containerId)
+- Fetches /api/news?category={category}, renders <ul><li> list per item
+- NEW! badge (class="badge-new") prepended for items within 24h
+- Error handling: fetch errors render error message in container
+- DOMContentLoaded auto-calls for ai, tech, hn categories
+- Configured jest testEnvironment: jsdom in package.json, installed jest-environment-jsdom
+- Created tests/news.frontend.test.js: 8 tests, all passing (jsdom, fetch mocked)
+- node --check public/js/news.js passes
+- Commit: ef287d7 on feature/news-aggregator-api
+- **Learnings:** Plain JS modules with CommonJS guard (typeof module !== 'undefined') work well with Jest jsdom. Always verify git branch before committing using git branch --show-current. git stash + checkout + stash pop is reliable for moving changes between branches.
+---
+
+## 2026-02-28 (retry) - US-005: Create public/js/news.js frontend fetch and render module
+- Fixed verifier feedback: updated index.html div IDs (#news-content -> #news-ai, #tech-news-content -> #news-hn)
+- Added #news-tech div for Ars Technica + The Verge feeds
+- Added <script src="js/news.js"> to index.html so module executes in browser
+- Created public/styles.css with @keyframes blink and .badge-new blinking animation (90s style!)
+- Existing public/js/news.js already correct (fetchAndRenderNews targets news-ai, news-tech, news-hn)
+- Existing tests/news.frontend.test.js: 8 tests, all passing in jsdom environment
+- Commit: 17127f0 on feature/news-aggregator-api
+- **Learnings:** git checkout changes working dir; always edit files AFTER checkout, not before. Use git branch --show-current to verify before committing.
+---
+
+## 2026-02-28 - US-006: Add 90s blinking NEW! CSS and news section HTML to public/
+- Created public/css/news.css with .badge-new { animation: blink 1s step-start infinite } and @keyframes blink { 50% { opacity: 0; } }
+- Added 90s bullet list styles (monospace font, custom >> bullet, dashed borders)
+- Created public/index.html with #news-ai, #news-tech, #news-hn divs and 90s headings
+- index.html includes <link href=/css/news.css> and <script src=/js/news.js>
+- Wrote tests/news.html.test.js (11 tests): asserts div ids, CSS rules, @keyframes, supertest GET /css/news.css returns 200
+- All 11 tests pass; node --check server.js passes
+- Commit: ac2050a on feature/news-aggregator-api
+- **Learnings:** When global jest testEnvironment is jsdom, supertest breaks (TextEncoder not defined). Fix: add /** @jest-environment node */ docblock to test files that use supertest/Node.js APIs. git cherry-pick is safer than re-implementing; always verify git branch --show-current BEFORE running git add/commit.
+---

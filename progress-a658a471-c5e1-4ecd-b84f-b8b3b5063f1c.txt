@@ -1,0 +1,42 @@
+# Progress Log
+Run: a658a471-c5e1-4ecd-b84f-b8b3b5063f1c
+Task: DurbinDash: OpenClaw news feed
+Started: 2026-02-28
+
+## Codebase Patterns
+- Tests use Jest + supertest; run with `npx jest tests/<file>.test.js`
+- node-fetch v3 is ESM; openclaw.js uses dynamic import trick: `const fetch = (...args) => import('node-fetch').then(({default:f})=>f(...))`
+- Express router pattern: create router in server/<module>.js, export it, mount in server.js
+- In-memory cache pattern: `{ data, expiresAt }` object with TTL constant
+- Test the cache via direct manipulation (mod.cache.data / mod.cache.expiresAt)
+
+---
+
+## 2026-02-28 - US-001: Create server/openclaw.js with GitHub releases fetch, cache, and route
+- Created server/openclaw.js with Express router for GET /api/openclaw
+- In-memory cache with 1-hour TTL using { data, expiresAt } pattern
+- node-fetch v3 ESM via dynamic import trick for CJS compatibility
+- Exports: router, cache, clearCache
+- Created tests/openclaw.test.js with 6 tests covering shape, caching, and expiry
+- Files: server/openclaw.js, tests/openclaw.test.js
+- **Learnings:** node-fetch v3 requires dynamic import in CJS; test cache directly via exported cache object
+---
+
+## 2026-02-28 retry - US-001: Create server/openclaw.js with GitHub releases fetch, cache, and route
+- Rewrote server/openclaw.js with dependency injection pattern (setFetch) for Jest testability
+- Changed from dynamic import trick to injectable fetch: setFetch(fn) allows test mocks without ESM issues
+- Fixed package.json: testEnvironment changed from 'jsdom' to 'node' (required for Jest + dynamic imports)
+- Mounted openclawRouter in server.js via app.use(openclawRouter)
+- Added #news-ai section to public/index.html with '🦅 OpenClaw Updates' subheader
+- Added 'What Is OpenClaw?' tooltip/blurb
+- Added frontend JS to fetch /api/openclaw and render with bold version + date in parens
+- Files changed: server/openclaw.js, tests/openclaw.test.js, server.js, package.json, public/index.html
+- **Learnings:** Jest jsdom env blocks dynamic imports; use 'node' testEnvironment + dependency injection for fetch
+---
+
+## 2026-02-28 retry2 - US-001: Frontend OpenClaw integration
+- Added public/js/openclaw.js: fetches /api/openclaw, renders 🦅 OpenClaw Updates subheader, bold version + date, What Is OpenClaw? tooltip
+- Updated public/index.html: restored full 90s portal layout, added #news-ai with OpenClaw content and openclaw.js script tag
+- All 6 backend tests pass
+- **Learnings:** Branch had diverged — reddit story (2dfb4b4) had replaced full index.html. Had to restore from commit 40fdbcf and add OpenClaw content on top.
+---

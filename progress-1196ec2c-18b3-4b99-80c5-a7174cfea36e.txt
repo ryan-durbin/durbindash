@@ -1,0 +1,41 @@
+# Progress Log
+Run: 1196ec2c-18b3-4b99-80c5-a7174cfea36e
+Task: DurbinDash: Reddit feed API
+Started: 2026-02-28
+
+## Codebase Patterns
+- Project uses CommonJS (require/module.exports), NOT ESM — despite node-fetch v3 being ESM-only, existing code uses require('node-fetch') which fails in Jest. Use Node built-in https module for new server modules to avoid Jest ESM compatibility issues.
+- Tests use Jest (jest.spyOn, jest.mock), run with `npx jest`
+- Server modules live in server/ directory, exported as { functionName }
+- In-memory cache pattern: `const cache = {}; cache[key] = { data, fetchedAt: Date.now() }`
+- Export `_cache` reference for test cleanup in beforeEach
+
+---
+
+## 2026-02-28 - US-001: Create server/reddit.js module with Reddit fetch and 30-min cache
+- Created server/reddit.js using Node built-in https module (avoids node-fetch ESM issues in Jest)
+- ALLOWED_SUBREDDITS: artificial, LocalLLaMA, homelab, selfhosted, homeassistant
+- 30-min in-memory cache keyed by subreddit
+- Throws for disallowed subreddits
+- Created tests/reddit.test.js with 4 tests covering: fetch+fields, allowlist rejection, cache hit, allowed list contents
+- Files: server/reddit.js, tests/reddit.test.js
+- Learnings: node-fetch v3 is ESM-only and breaks Jest; use https built-in instead. Export _cache for test cleanup.
+---
+## 2026-02-28 - US-002: Wire GET /api/reddit route into Express server
+- Added `require('./server/reddit')` to server.js
+- Registered GET /api/reddit route with sub validation against ALLOWED_SUBREDDITS
+- Returns 400 if sub missing or not in allowed list, 502 on upstream error, 200 with posts array on success
+- Files changed: server.js, tests/reddit.route.test.js (created)
+- **Learnings:** Jest environment must be `node` (not jsdom) for supertest; add `@jest-environment node` docblock OR ensure no jsdom in package.json jest config. This branch has no jsdom config so tests run fine. When branching, always verify which branch you're on early — the repo has multiple active feature branches.
+---
+
+## 2026-02-28 - US-003: Create public/js/reddit.js frontend with 90s BBS-style rendering
+- Created public/js/reddit.js with renderPosts() and formatScore() helpers
+- Section headers use `[ r/SUBREDDIT ]` pattern; scores formatted as `[▲ N,NNN]`
+- Title anchors link to post.url; comment links to https://reddit.com + permalink
+- Created public/index.html with #reddit-feed div and <script src="/js/reddit.js">
+- Created tests/reddit.frontend.test.js with 6 node:test tests (all pass)
+- module.exports conditional allows testing in Node without browser globals
+- Files changed: public/js/reddit.js, public/index.html, tests/reddit.frontend.test.js
+- **Learnings:** Browser JS can be tested in Node if you guard `module.exports` and `document` with typeof checks. Cherry-pick needed after stash confusion put commit on wrong branch.
+---

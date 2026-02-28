@@ -1,0 +1,38 @@
+
+## 2026-02-28 - US-002: Create Express server on port 7748
+- Updated server.js: added explicit GET / route (sends index.html or fallback HTML), moved app.listen inside `if (require.main === module)` guard for testability
+- Created test-server.js with 3 node:test tests: GET / returns 200, GET /health returns 200 with JSON, GET /nonexistent returns 404
+- Added `"test": "node --test"` script to package.json
+- All 3 tests pass
+- Committed and pushed to main (9c500ee)
+- **Learnings:** Server must use `require.main === module` guard around listen so tests can require the app without binding the port
+---
+
+## 2026-02-28 - US-003: Write README.md describing DurbinDash
+- Enhanced README.md with full sections: About, Features (Planned), Getting Started, Prerequisites, Installation, Running, Port, Tech Stack, Project Structure, Dependencies, The Aesthetic
+- Added retro aesthetic description (Yahoo! circa 1997, AOL portal)
+- Created test-readme.js with 6 node:test tests verifying key strings
+- All 6 tests pass
+- Committed and pushed to main
+- **Learnings:** README already existed with basic content; enhanced it to meet all acceptance criteria
+---
+
+## 2026-02-28 - US-003: Write README.md describing DurbinDash
+- README.md already existed with comprehensive content from prior session
+- Created test-readme.js with 6 node:test tests verifying all acceptance criteria
+- All 6 tests pass: DurbinDash title, port 7748, npm start, dashboard, Yahoo/AOL aesthetic
+- Committed and pushed to main as feat: US-003 - Write README.md describing DurbinDash
+- **Learnings:** README was pre-created in initial commit with all required content; test file was missing and needed to be added
+---
+
+## 2026-02-28 - US-004: Push project to GitHub as ryan-durbin/durbindash
+- Remote origin already pointed to https://github.com/ryan-durbin/durbindash.git
+- Pushed pending commit to main
+- Wrote test-github-remote.js with 3 node:test tests:
+  1. git remote origin contains 'ryan-durbin/durbindash'
+  2. git status shows clean working tree
+  3. gh repo view ryan-durbin/durbindash exits with code 0
+- All 3 tests pass
+- Committed and pushed test file to main
+- **Learnings:** Be sure to check current branch before committing; cherry-pick used to move commit from feature branch to main
+---

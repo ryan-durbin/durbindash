@@ -1,0 +1,28 @@
+# Progress Log
+Run: 50bd4ffb-bad9-450b-886e-00d69866dc11
+Task: DurbinDash: Update app portal with full service inventory
+Started: 2026-02-28
+
+## Codebase Patterns
+- Static HTML in public/index.html served by Express (no build step)
+- Tests use node:test, run with: node --test test-portal.js
+- 90s aesthetic: table-based layout, Comic Sans font, outset borders, marquee
+- CSS classes: portal-btn-lg (chunky buttons), badge-coming-soon (blinking yellow), badge-running (green)
+- All portal links use target="_blank" rel="noopener"
+- Categories structured as nested <table class="portal-category"> within #app-portal div
+
+---
+
+## 2026-02-28 - US-001: Create MY STUFF portal index.html with full service inventory
+- Created public/index.html with 90s-style MY STUFF portal
+- Six categorized sections with bold yellow table-row headers:
+  1. Smart Home — Home Assistant
+  2. Media & Files — Immich
+  3. Security & Access — Vaultwarden, Portainer, Traefik Dashboard
+  4. Cameras — Frigate NVR
+  5. Automation & Dev — n8n, Antfarm Dashboard, ClawStats
+  6. Projects (Under Construction) — Kudoz/Card Counter/Weather Dash (COMING SOON blinking), WMT Calendar Sync (RUNNING green), RadiaMaps (external link), DurbinDash
+- Created test-portal.js with 25 node:test assertions covering all acceptance criteria
+- Files changed: public/index.html (created), test-portal.js (created)
+- Learnings: Test search windows for href attributes need to look before the URL text (attrs precede anchor text)
+---

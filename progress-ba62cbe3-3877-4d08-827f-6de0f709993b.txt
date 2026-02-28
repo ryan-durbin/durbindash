@@ -1,0 +1,57 @@
+# Progress Log
+Run: ba62cbe3-3877-4d08-827f-6de0f709993b
+Task: DurbinDash Weather API integration
+Started: 2026-02-28
+
+## Codebase Patterns
+- Pure Node.js/Express, no build step; server.js is the entry point
+- Tests in tests/ directory using Jest; run with `npx jest`
+- server/weather.js exports fetchWeather() and getDescription() 
+- Static files served from public/; JS goes in public/js/
+- Port: 7748 (configurable via PORT env var)
+
+---
+
+## 2026-02-28 - US-002: Create server/weather.js — Open-Meteo API integration
+- Implemented server/weather.js with fetchWeather() and WMO code mapping (already existed)
+- Fixed regression: restored public/index.html which was deleted on branch
+- Updated #weather-content → #weather-widget per task requirements
+- Added GET /api/weather endpoint to server.js
+- Created public/js/weather.js with 90s-style weather widget, emoji icons (☀️ ⛅ 🌧️ ❄️ ⚡)
+- Files changed: public/index.html (restored+modified), public/js/weather.js (new), server.js (added /api/weather)
+- **Learnings:** Always check for regressions — index.html was missing from the branch
+---
+
+## 2026-02-28 - US-003: Expose GET /api/weather endpoint in Express server
+- Added server/weather.js (fetchWeather + getDescription, WMO code mapping, Open-Meteo API)
+- Added GET /api/weather route to server.js with try/catch, 200 on success, 502 on error
+- Created tests/weather.endpoint.test.js using supertest + jest.mock('../server/weather')
+- **Learnings:** server/weather.js was not yet committed; had to create it as part of this story. node-fetch v3 in package.json but jest.mock works fine for CJS. Use --forceExit with Jest to prevent hanging due to express server.
+---
+
+## 2026-02-28 (retry) - US-003: Expose GET /api/weather endpoint in Express server
+- Created server/weather.js with fetchWeather() using `require('node-fetch').default` (node-fetch v3 fix)
+- Updated server.js: added GET /api/weather route; 200 on success, 502 { error: 'Weather unavailable' } on error
+- Guarded app.listen with `require.main === module` so tests can require server.js without port conflicts
+- Created tests/weather.endpoint.test.js with supertest; jest.mock('../server/weather') to mock fetchWeather
+- All 6 tests pass
+- **Learnings:** node-fetch v3 exports ESM-style default; CJS require needs .default. Guard app.listen for testability.
+---
+# Progress Log
+Run: ba62cbe3-3877-4d08-827f-6de0f709993b
+Task: DurbinDash Weather API integration
+
+## Codebase Patterns
+- node-fetch v3 is ESM only; Jest tests must mock it: `jest.mock('node-fetch', () => jest.fn())`
+- server.js exports `app` and guards `app.listen` with `require.main === module` for testability
+- supertest tests mock the weather module with `jest.mock('../server/weather')` then control `fetchWeather` per test
+
+---
+
+## 2026-02-28 - US-003: Expose GET /api/weather endpoint in Express server
+- Fixed server.js: changed error response from 500 to 502, added `require.main === module` guard on app.listen
+- Created tests/weather.endpoint.test.js with supertest: 2 tests covering 200 success and 502 error paths
+- All 29 tests pass
+- Files changed: server.js, tests/weather.endpoint.test.js
+- **Learnings:** Must mock node-fetch before requiring server/weather.js in Jest tests (ESM issue). jest.mock('../server/weather') auto-mocks the module allowing mockResolvedValue/mockRejectedValue.
+---
