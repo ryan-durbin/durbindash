@@ -1,12 +1,30 @@
 'use strict';
 
 const express = require('express');
-const fetch = (...args) => import('node-fetch').then(({ default: f }) => f(...args));
 
 const router = express.Router();
 
+const GITHUB_RELEASES_URL = 'https://api.github.com/repos/openclaw/openclaw/releases';
 const TTL = 3600000; // 1 hour in ms
-const cache = { data: null, expiresAt: 0 };
+
+const cache = {
+  data: null,
+  expiresAt: 0,
+};
+
+let _fetch = null;
+
+async function getFetch() {
+  if (!_fetch) {
+    const mod = await import('node-fetch');
+    _fetch = mod.default;
+  }
+  return _fetch;
+}
+
+function setFetch(fn) {
+  _fetch = fn;
+}
 
 function clearCache() {
   cache.data = null;
@@ -14,34 +32,41 @@ function clearCache() {
 }
 
 async function fetchReleases() {
-  const res = await fetch('https://api.github.com/repos/openclaw/openclaw/releases', {
+  if (cache.data && Date.now() < cache.expiresAt) {
+    return cache.data;
+  }
+
+  const fetchFn = await getFetch();
+  const res = await fetchFn(GITHUB_RELEASES_URL, {
     headers: { 'User-Agent': 'durbindash/1.0' },
   });
+
   if (!res.ok) {
-    throw new Error(`GitHub API error: ${res.status}`);
+    throw new Error('GitHub API error: ' + res.status);
   }
+
   const releases = await res.json();
-  return releases.slice(0, 3).map((r) => ({
+
+  const data = releases.slice(0, 3).map((r) => ({
     tag_name: r.tag_name,
     name: r.name,
     published_at: r.published_at,
     body: (r.body || '').slice(0, 200),
   }));
+
+  cache.data = data;
+  cache.expiresAt = Date.now() + TTL;
+
+  return data;
 }
 
 router.get('/api/openclaw', async (req, res) => {
   try {
-    const now = Date.now();
-    if (cache.data && now < cache.expiresAt) {
-      return res.json(cache.data);
-    }
     const data = await fetchReleases();
-    cache.data = data;
-    cache.expiresAt = now + TTL;
     res.json(data);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(502).json({ error: 'Failed to fetch OpenClaw releases' });
   }
 });
 
-module.exports = { router, cache, clearCache };
+module.exports = { router, cache, clearCache, fetchReleases, setFetch };

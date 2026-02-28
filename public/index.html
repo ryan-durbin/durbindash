@@ -42,6 +42,14 @@
       font-weight: bold; font-size: 13px;
       border: 3px inset #555555; vertical-align: middle; cursor: default;
     }
+  
+    .openclaw-version { font-weight: bold; }
+    .openclaw-date { color: #666; }
+    .openclaw-subheader { font-size: 13px; font-weight: bold; margin: 6px 0 4px; }
+    .openclaw-entry { margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px dashed #ccc; }
+    .tooltip-trigger { cursor: help; border-bottom: 1px dotted #0000cc; position: relative; }
+    .tooltip-text { display: none; position: absolute; background: #ffffc0; border: 1px solid #999; padding: 4px 8px; font-size: 11px; max-width: 280px; z-index: 100; }
+    .tooltip-trigger:hover .tooltip-text { display: block; }
   </style>
 </head>
 <body>
@@ -146,7 +154,18 @@
     </td>
   </tr>
 
-  <tr>
+    <tr>
+    <td colspan="2" class="section-cell" id="news-ai" valign="top">
+      <div class="section-header">AI &amp; HOMELAB NEWS <span class="new-badge">&#9733; NEW!</span></div>
+      <div class="openclaw-subheader">
+        &#129415; OpenClaw Updates
+        <span class="tooltip-trigger"> [?]<span class="tooltip-text">OpenClaw is your AI personal assistant platform &mdash; running locally on your homelab!</span></span>
+      </div>
+      <div id="openclaw-content"><p><em>Loading OpenClaw updates...</em></p></div>
+    </td>
+  </tr>
+
+<tr>
     <td colspan="2" class="section-cell footer-cell" valign="top">
       <div id="under-construction" class="under-construction">
         &#9888; UNDER CONSTRUCTION &#9888;
@@ -157,5 +176,27 @@
   </tr>
 </table>
 
+<script>
+(function() {
+  fetch('/api/openclaw')
+    .then(function(r) { return r.json(); })
+    .then(function(releases) {
+      var el = document.getElementById('openclaw-content');
+      if (!releases || !releases.length) { el.innerHTML = '<p><em>No releases found.</em></p>'; return; }
+      var html = '';
+      releases.forEach(function(r) {
+        var date = r.published_at ? new Date(r.published_at).toLocaleDateString() : '';
+        html += '<div class="openclaw-entry"><span class="openclaw-version">' + r.name + '</span> ';
+        if (date) html += '<span class="openclaw-date">(' + date + ')</span>';
+        if (r.body) html += '<p style="margin:4px 0 0;">' + r.body + '</p>';
+        html += '</div>';
+      });
+      el.innerHTML = html;
+    })
+    .catch(function() {
+      document.getElementById('openclaw-content').innerHTML = '<p><em>Unable to load OpenClaw updates.</em></p>';
+    });
+})();
+</script>
 </body>
 </html>
