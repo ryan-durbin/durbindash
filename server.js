@@ -16,7 +16,7 @@ const openclawRouter = require('./server/openclaw');
 app.use('/api/weather', weatherRouter);
 app.use('/api/news', newsRouter);
 app.use('/api/reddit', redditRouter);
-app.use('/api/openclaw', openclawRouter);
+app.use("/api/openclaw", openclawRouter.router);
 
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', app: 'durbindash' });

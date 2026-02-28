@@ -29,3 +29,35 @@
       });
     });
 })();
+
+// OpenClaw Updates
+(function() {
+  var container = document.getElementById('news-ai');
+  if (!container) return;
+
+  fetch('/api/openclaw')
+    .then(function(r) { return r.json(); })
+    .then(function(releases) {
+      var blurb = container.querySelector('.openclaw-blurb');
+      if (!blurb) {
+        blurb = document.createElement('div');
+        blurb.className = 'openclaw-blurb';
+        blurb.innerHTML = '<span class="openclaw-tooltip" title="OpenClaw is your AI personal assistant platform — running locally on your homelab!">What Is OpenClaw? 🦅</span>';
+        container.appendChild(blurb);
+      }
+      var html = releases.map(function(r) {
+        var date = r.published_at ? '(' + r.published_at.slice(0, 10) + ')' : '';
+        return '<div class="news-item openclaw-release">' +
+          '<strong>' + r.tag_name + '</strong> ' + date +
+          (r.name ? ' — ' + r.name : '') +
+          (r.body ? '<div class="openclaw-body">' + r.body + '</div>' : '') +
+          '</div>';
+      }).join('');
+      container.insertAdjacentHTML('beforeend', html || '<div class="error">No releases</div>');
+    })
+    .catch(function() {
+      if (container) {
+        container.insertAdjacentHTML('beforeend', '<div class="error">OpenClaw releases unavailable</div>');
+      }
+    });
+})();
