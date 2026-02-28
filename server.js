@@ -4,11 +4,13 @@ const express = require('express');
 const path = require('path');
 const { fetchWeather } = require('./server/weather');
 const { getSubredditPosts, ALLOWED_SUBREDDITS } = require('./server/reddit');
+const newsRouter = require('./server/news');
 
 const app = express();
 const PORT = process.env.PORT || 7748;
 
 app.use(express.json());
+app.use(newsRouter);
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/health', (req, res) => {
