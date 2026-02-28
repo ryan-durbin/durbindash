@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>DurbinDash - Ryan's Personal Portal</title>
+  <link rel='stylesheet' href='styles.css'>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+
+<marquee behavior="scroll" direction="left" scrollamount="4" bgcolor="#000080" style="color:#ffff00;font-family:'Comic Sans MS',cursive;font-weight:bold;padding:6px;font-size:16px;">
+  &#9658; WELCOME TO DURBINDASH :: YOUR PERSONAL WEB PORTAL :: EST. 2026 &#9658; WELCOME TO DURBINDASH :: YOUR PERSONAL WEB PORTAL :: EST. 2026 &#9658;
+</marquee>
+
+<table width="100%" border="2" cellpadding="6" cellspacing="2" bgcolor="#c0c0c0">
+
+  <!-- ROW 2: WEATHER | TODAY'S NEWS -->
+  <tr>
+    <td width="30%" valign="top" bgcolor="#003366">
+      <div class="section-header">&#9728; WEATHER</div>
+      <div id="weather-content">
+        <p style="color:#ffffff;font-family:Arial,sans-serif;font-size:13px;">
+          Loading weather data...<br>
+          <em>Anchorage, AK</em>
+        </p>
+      </div>
+    </td>
+    <td width="70%" valign="top" bgcolor="#004040">
+      <div class="section-header">
+        TODAY'S NEWS
+        <span class='new-badge'>&#9733; NEW!</span>
+      </div>
+      <div id="news-content">
+        <p style="color:#ffffff;font-family:Arial,sans-serif;font-size:13px;">
+          Loading latest news...<br>
+          Check back soon for headlines!
+        </p>
+      </div>
+    </td>
+  </tr>
+
+  <!-- ROW 3: MY STUFF app portal -->
+  <tr>
+    <td colspan="2" valign="top" bgcolor="#800080" align="center">
+      <div class="section-header">&#9733; MY STUFF &#9733; YOUR PERSONAL APP PORTAL &#9733;</div>
+      <div id="app-portal" style="padding:10px;">
+        <a href="http://10.0.1.132:8123" class="portal-btn" target="_blank">&#127968; Home Assistant</a>
+        <a href="http://10.0.1.132:7747" class="portal-btn" target="_blank">&#128202; ClawStats</a>
+        <a href="http://10.0.1.132:5678" class="portal-btn" target="_blank">&#9881; n8n</a>
+        <a href="http://10.0.1.132:3333" class="portal-btn" target="_blank">&#127807; Antfarm</a>
+        <a href="http://10.0.1.132:8080" class="portal-btn" target="_blank">&#128272; Vaultwarden</a>
+        <a href="http://10.0.1.132:2283" class="portal-btn" target="_blank">&#128247; Immich</a>
+      </div>
+    </td>
+  </tr>
+
+  <!-- ROW 4: REDDIT | TECH NEWS -->
+  <tr>
+    <td width="50%" valign="top" bgcolor="#006633">
+      <div class="section-header">&#128293; WHAT'S HOT ON REDDIT</div>
+      <div id="reddit-content">
+        <p style="color:#ffffff;font-family:Arial,sans-serif;font-size:13px;">
+          Loading hot posts...<br>
+          Reddit content coming soon!
+        </p>
+      </div>
+    </td>
+    <td width="50%" valign="top" bgcolor="#333300">
+      <div class="section-header">
+        TECH NEWS
+        <span class='new-badge'>&#9733; NEW!</span>
+      </div>
+      <div id="tech-news-content">
+        <p style="color:#ffffff;font-family:Arial,sans-serif;font-size:13px;">
+          Loading tech news...<br>
+          Hacker News coming soon!
+        </p>
+      </div>
+    </td>
+  </tr>
+
+  <!-- ROW 5: Under Construction + Visitor Counter -->
+  <tr>
+    <td colspan="2" align="center" bgcolor="#1a1a2e">
+      <div id="under-construction" class="under-construction">
+        &#9888; UNDER CONSTRUCTION &#9888;<br>
+        <small style="color:#ffff00;">More awesome content coming soon! This site is always being improved!</small>
+      </div>
+      <div class="visitor-counter">Visitors: 001337</div>
+    </td>
+  </tr>
+
+</table>
+
+<script src="app.js"></script>
+</body>
+</html>
