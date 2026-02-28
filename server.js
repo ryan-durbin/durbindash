@@ -19,11 +19,11 @@ app.get('/api/weather', async (req, res) => {
     const weather = await fetchWeather();
     res.json(weather);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(502).json({ error: 'Weather unavailable' });
   }
 });
 
-app.listen(PORT, () => {
+if (require.main === module) app.listen(PORT, () => {
   console.log(`DurbinDash running on http://localhost:${PORT}`);
 });
 
