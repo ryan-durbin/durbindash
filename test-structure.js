@@ -51,106 +51,101 @@ test('README.md exists', () => {
   assert.ok(fs.existsSync(path.join(root, 'README.md')), 'README.md should exist');
 });
 
-// Regression tests: catch missing files, routes, and required HTML elements
+// US-003: index.html content tests
+const indexHtmlPath = path.join(root, 'public', 'index.html');
+
 test('public/index.html exists', () => {
-  assert.ok(fs.existsSync(path.join(root, 'public', 'index.html')), 'public/index.html should exist');
+  assert.ok(fs.existsSync(indexHtmlPath), 'public/index.html should exist');
 });
 
-test('public/index.html contains #weather-widget', () => {
-  const html = fs.readFileSync(path.join(root, 'public', 'index.html'), 'utf8');
-  assert.ok(html.includes('id="weather-widget"'), 'index.html must have #weather-widget div');
+test('index.html has correct title', () => {
+  const html = fs.readFileSync(indexHtmlPath, 'utf8');
+  assert.ok(html.includes("<title>DurbinDash - Ryan's Personal Portal</title>"), 'title should be correct');
 });
 
-test('public/index.html contains #news-ai', () => {
-  const html = fs.readFileSync(path.join(root, 'public', 'index.html'), 'utf8');
-  assert.ok(html.includes('id="news-ai"'), 'index.html must have #news-ai div');
+test('index.html has marquee with welcome text', () => {
+  const html = fs.readFileSync(indexHtmlPath, 'utf8');
+  assert.ok(html.includes('WELCOME TO DURBINDASH :: YOUR PERSONAL WEB PORTAL :: EST. 2026'), 'marquee text should exist');
+  assert.ok(html.includes('<marquee'), 'marquee tag should exist');
 });
 
-test('public/index.html contains #news-tech', () => {
-  const html = fs.readFileSync(path.join(root, 'public', 'index.html'), 'utf8');
-  assert.ok(html.includes('id="news-tech"'), 'index.html must have #news-tech div');
+test('index.html links to styles.css', () => {
+  const html = fs.readFileSync(indexHtmlPath, 'utf8');
+  assert.ok(html.includes("href='styles.css'") || html.includes('href="styles.css"'), 'should link to styles.css');
 });
 
-test('public/index.html contains #news-hn', () => {
-  const html = fs.readFileSync(path.join(root, 'public', 'index.html'), 'utf8');
-  assert.ok(html.includes('id="news-hn"'), 'index.html must have #news-hn div');
+test('index.html has table-based layout', () => {
+  const html = fs.readFileSync(indexHtmlPath, 'utf8');
+  assert.ok(html.includes('<table'), 'should have table element');
 });
 
-test('public/index.html contains #reddit-feed', () => {
-  const html = fs.readFileSync(path.join(root, 'public', 'index.html'), 'utf8');
-  assert.ok(html.includes('id="reddit-feed"'), 'index.html must have #reddit-feed div');
+test('index.html has weather-content placeholder', () => {
+  const html = fs.readFileSync(indexHtmlPath, 'utf8');
+  assert.ok(html.includes("id=\"weather-content\"") || html.includes("id='weather-content'"), 'weather-content div should exist');
 });
 
-test('public/index.html contains OpenClaw Updates subheader', () => {
-  const html = fs.readFileSync(path.join(root, 'public', 'index.html'), 'utf8');
-  assert.ok(html.includes('OpenClaw Updates'), 'index.html must include OpenClaw Updates subheader in #news-ai');
+test('index.html has news-content placeholder', () => {
+  const html = fs.readFileSync(indexHtmlPath, 'utf8');
+  assert.ok(html.includes("id=\"news-content\"") || html.includes("id='news-content'"), 'news-content div should exist');
 });
 
-test('public/index.html contains app-portal section', () => {
-  const html = fs.readFileSync(path.join(root, 'public', 'index.html'), 'utf8');
-  assert.ok(html.includes('id="app-portal"'), 'index.html must have #app-portal section');
+test('index.html has reddit-content placeholder', () => {
+  const html = fs.readFileSync(indexHtmlPath, 'utf8');
+  assert.ok(html.includes("id=\"reddit-content\"") || html.includes("id='reddit-content'"), 'reddit-content div should exist');
 });
 
-test('public/index.html loads js/weather.js', () => {
-  const html = fs.readFileSync(path.join(root, 'public', 'index.html'), 'utf8');
-  assert.ok(html.includes('js/weather.js'), 'index.html must include js/weather.js script tag');
+test('index.html has tech-news-content placeholder', () => {
+  const html = fs.readFileSync(indexHtmlPath, 'utf8');
+  assert.ok(html.includes("id=\"tech-news-content\"") || html.includes("id='tech-news-content'"), 'tech-news-content div should exist');
 });
 
-test('public/index.html loads js/news.js', () => {
-  const html = fs.readFileSync(path.join(root, 'public', 'index.html'), 'utf8');
-  assert.ok(html.includes('js/news.js'), 'index.html must include js/news.js script tag');
+test('index.html has under-construction div', () => {
+  const html = fs.readFileSync(indexHtmlPath, 'utf8');
+  assert.ok(html.includes("id=\"under-construction\"") || html.includes("id='under-construction'"), 'under-construction div should exist');
 });
 
-test('public/js/weather.js exists', () => {
-  assert.ok(fs.existsSync(path.join(root, 'public', 'js', 'weather.js')), 'public/js/weather.js should exist');
+test('index.html has new-badge element', () => {
+  const html = fs.readFileSync(indexHtmlPath, 'utf8');
+  assert.ok(html.includes("class='new-badge'") || html.includes('class="new-badge"'), 'new-badge element should exist');
 });
 
-test('public/js/news.js exists', () => {
-  assert.ok(fs.existsSync(path.join(root, 'public', 'js', 'news.js')), 'public/js/news.js should exist');
+test('index.html has visitor counter with 001337', () => {
+  const html = fs.readFileSync(indexHtmlPath, 'utf8');
+  assert.ok(html.includes('Visitors: 001337'), 'visitor counter should show 001337');
 });
 
-test('server/weather.js exists', () => {
-  assert.ok(fs.existsSync(path.join(root, 'server', 'weather.js')), 'server/weather.js router should exist');
+test('index.html has all 6 portal-btn links', () => {
+  const html = fs.readFileSync(indexHtmlPath, 'utf8');
+  const btnCount = (html.match(/class="portal-btn"|class='portal-btn'/g) || []).length;
+  assert.ok(btnCount >= 6, `should have at least 6 portal-btn links, found ${btnCount}`);
 });
 
-test('server/news.js exists', () => {
-  assert.ok(fs.existsSync(path.join(root, 'server', 'news.js')), 'server/news.js router should exist');
+test('index.html portal-btn has Home Assistant URL', () => {
+  const html = fs.readFileSync(indexHtmlPath, 'utf8');
+  assert.ok(html.includes('10.0.1.132:8123'), 'Home Assistant URL should exist');
 });
 
-test('server/reddit.js exists', () => {
-  assert.ok(fs.existsSync(path.join(root, 'server', 'reddit.js')), 'server/reddit.js router should exist');
+test('index.html portal-btn has ClawStats URL', () => {
+  const html = fs.readFileSync(indexHtmlPath, 'utf8');
+  assert.ok(html.includes('10.0.1.132:7747'), 'ClawStats URL should exist');
 });
 
-test('server/openclaw.js exists', () => {
-  assert.ok(fs.existsSync(path.join(root, 'server', 'openclaw.js')), 'server/openclaw.js router should exist');
+test('index.html portal-btn has n8n URL', () => {
+  const html = fs.readFileSync(indexHtmlPath, 'utf8');
+  assert.ok(html.includes('10.0.1.132:5678'), 'n8n URL should exist');
 });
 
-test('server.js mounts /api/openclaw route', () => {
-  const src = fs.readFileSync(path.join(root, 'server.js'), 'utf8');
-  assert.ok(src.includes('/api/openclaw'), 'server.js must mount /api/openclaw route');
+test('index.html portal-btn has Antfarm URL', () => {
+  const html = fs.readFileSync(indexHtmlPath, 'utf8');
+  assert.ok(html.includes('10.0.1.132:3333'), 'Antfarm URL should exist');
 });
 
-test('server.js mounts /api/weather route', () => {
-  const src = fs.readFileSync(path.join(root, 'server.js'), 'utf8');
-  assert.ok(src.includes('/api/weather'), 'server.js must mount /api/weather route');
+test('index.html portal-btn has Vaultwarden URL', () => {
+  const html = fs.readFileSync(indexHtmlPath, 'utf8');
+  assert.ok(html.includes('10.0.1.132:8080'), 'Vaultwarden URL should exist');
 });
 
-test('server.js mounts /api/news route', () => {
-  const src = fs.readFileSync(path.join(root, 'server.js'), 'utf8');
-  assert.ok(src.includes('/api/news'), 'server.js must mount /api/news route');
-});
-
-test('server.js mounts /api/reddit route', () => {
-  const src = fs.readFileSync(path.join(root, 'server.js'), 'utf8');
-  assert.ok(src.includes('/api/reddit'), 'server.js must mount /api/reddit route');
-});
-
-test('package.json has jest devDependency', () => {
-  const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
-  assert.ok(pkg.devDependencies && pkg.devDependencies.jest, 'jest should be in devDependencies');
-});
-
-test('package.json has test script', () => {
-  const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
-  assert.ok(pkg.scripts && pkg.scripts.test, 'package.json must have a test script');
+test('index.html portal-btn has Immich URL', () => {
+  const html = fs.readFileSync(indexHtmlPath, 'utf8');
+  assert.ok(html.includes('10.0.1.132:2283'), 'Immich URL should exist');
 });

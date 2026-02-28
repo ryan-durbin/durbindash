@@ -1,0 +1,104 @@
+/* ==============================================
+   DurbinDash Styles - 90s Yahoo/AOL Portal Vibes
+   ============================================== */
+
+body {
+    background-color: #000080;
+    color: #FFFFFF;
+    font-family: 'Comic Sans MS', 'Comic Sans', Arial, sans-serif;
+    margin: 0;
+    padding: 4px;
+    font-size: 13px;
+}
+
+table { width: 100%; border-collapse: collapse; }
+td { vertical-align: top; padding: 6px; }
+
+.section-header {
+    background-color: #FFD700;
+    color: #000080;
+    font-weight: bold;
+    font-size: 14px;
+    text-align: center;
+    padding: 4px 8px;
+    border: 2px solid #FF00FF;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.portal-btn {
+    display: inline-block;
+    background-color: #008080;
+    color: #FFFFFF;
+    font-weight: bold;
+    font-size: 12px;
+    text-decoration: none;
+    padding: 6px 12px;
+    margin: 4px;
+    border: 2px outset #00FFFF;
+    cursor: pointer;
+}
+.portal-btn:hover { background-color: #00AAAA; border-style: inset; color: #FFD700; }
+
+.visitor-counter {
+    border: 3px solid #FFD700;
+    color: #FFD700;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    font-size: 14px;
+    text-align: center;
+    padding: 6px;
+    background-color: #000033;
+    display: inline-block;
+}
+
+/* --- Blinking animation (90s style!) --- */
+@keyframes blink {
+    0%   { opacity: 1; }
+    49%  { opacity: 1; }
+    50%  { opacity: 0; }
+    99%  { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+/* Section header NEW! badges */
+.new-badge {
+    display: inline-block;
+    background-color: #FF0000;
+    color: #FFFFFF;
+    font-weight: bold;
+    font-size: 10px;
+    padding: 1px 4px;
+    margin-left: 4px;
+    animation: blink 1s step-end infinite;
+    border: 1px solid #FF9900;
+    vertical-align: middle;
+}
+
+/* News item NEW! badges (blinking, 90s style) */
+.badge-new {
+    display: inline-block;
+    background-color: #FF0000;
+    color: #FFFFFF;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    font-size: 10px;
+    padding: 1px 4px;
+    margin-right: 4px;
+    animation: blink 1s step-end infinite;
+    border: 1px solid #FF9900;
+    vertical-align: middle;
+}
+
+.under-construction {
+    padding: 10px;
+    text-align: center;
+    background-color: #1a1a00;
+    color: #FFD700;
+    font-weight: bold;
+    border: 4px solid #FFD700;
+}
+
+a { color: #00FFFF; text-decoration: underline; }
+a:visited { color: #FF00FF; }
+a:hover { color: #FFD700; }
