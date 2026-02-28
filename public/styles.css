@@ -102,3 +102,35 @@ td { vertical-align: top; padding: 6px; }
 a { color: #00FFFF; text-decoration: underline; }
 a:visited { color: #FF00FF; }
 a:hover { color: #FFD700; }
+
+/* Weather forecast widget */
+.wx-forecast {
+    margin-top: 8px;
+    border-top: 1px solid #008080;
+}
+
+.wx-fc-label {
+    background-color: #000066;
+    color: #FFD700;
+    font-weight: bold;
+    font-size: 0.75em;
+    text-transform: uppercase;
+    padding: 2px 4px;
+    letter-spacing: 1px;
+}
+
+.wx-fc-days {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 4px 0;
+}
+
+.wx-fc-day {
+    text-align: center;
+    font-size: 0.8em;
+    color: #FFFFFF;
+    border: 1px solid #008080;
+    padding: 3px 6px;
+    min-width: 44px;
+}

@@ -45,9 +45,9 @@ const WEATHER_URL =
   'https://api.open-meteo.com/v1/forecast' +
   '?latitude=61.2181&longitude=-149.9003' +
   '&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code' +
-  '&daily=temperature_2m_max,temperature_2m_min' +
+  '&daily=temperature_2m_max,temperature_2m_min,weather_code' +
   '&temperature_unit=fahrenheit&wind_speed_unit=mph' +
-  '&timezone=America%2FAnchorage&forecast_days=1';
+  '&timezone=America%2FAnchorage&forecast_days=4';
 
 async function fetchWeather() {
   const res = await fetch(WEATHER_URL);
@@ -57,6 +57,13 @@ async function fetchWeather() {
   const current = data.current;
   const daily = data.daily;
 
+  const forecast = [1, 2, 3].map((i) => ({
+    date: daily.time[i],
+    high: daily.temperature_2m_max[i],
+    low: daily.temperature_2m_min[i],
+    description: getDescription(daily.weather_code[i]),
+  }));
+
   return {
     temperature: current.temperature_2m,
     description: getDescription(current.weather_code),
@@ -64,6 +71,7 @@ async function fetchWeather() {
     humidity: current.relative_humidity_2m,
     highTemp: daily.temperature_2m_max[0],
     lowTemp: daily.temperature_2m_min[0],
+    forecast,
   };
 }
 
