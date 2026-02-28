@@ -42,6 +42,13 @@
       font-weight: bold; font-size: 13px;
       border: 3px inset #555555; vertical-align: middle; cursor: default;
     }
+
+    #news-feed-ai { margin-top: 28px; }
+    .news-section-header { color: #ffcc00; font-weight: bold; margin: 14px 0 6px; font-size: 1.1em; }
+    .news-title { color: #33ff33; text-decoration: none; }
+    .news-title:hover { color: #ffff00; text-decoration: underline; }
+    .news-meta { color: #999; font-size: 0.85em; }
+    .news-error { color: #cc3333; }
   </style>
 </head>
 <body>
@@ -157,5 +164,8 @@
   </tr>
 </table>
 
+  <h2 class="news-section-header">[ AI News ]</h2>
+  <div id="news-feed-ai"></div>
+  <script src="/news.js"></script>
 </body>
 </html>
