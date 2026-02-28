@@ -1,0 +1,258 @@
+/* ============================================================
+   DurbinDash Styles — 90s Yahoo/AOL Portal Vibes
+   Color Palette:
+     Navy:    #000080
+     Teal:    #008080
+     Yellow:  #FFD700
+     Magenta: #FF00FF
+   ============================================================ */
+
+/* === RESET & BASE === */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #000080;
+  color: #FFFFFF;
+  font-family: "Comic Sans MS", "Comic Sans", Arial, sans-serif;
+  margin: 0;
+  padding: 4px;
+  font-size: 13px;
+}
+
+a {
+  color: #FFD700;
+  text-decoration: underline;
+}
+
+a:visited {
+  color: #FF00FF;
+}
+
+a:hover {
+  color: #FFFFFF;
+  text-decoration: underline;
+}
+
+/* === TABLE LAYOUT === */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+td {
+  vertical-align: top;
+  padding: 6px;
+}
+
+/* === MARQUEE === */
+marquee {
+  background-color: #008080;
+  color: #FFD700;
+  font-family: "Comic Sans MS", Arial, sans-serif;
+  font-weight: bold;
+  font-size: 14px;
+  padding: 4px 0;
+  border-top: 2px solid #FFD700;
+  border-bottom: 2px solid #FFD700;
+}
+
+/* === SECTION HEADER BANNERS === */
+.section-header {
+  background-color: #FFD700;
+  color: #000080;
+  font-family: "Comic Sans MS", "Comic Sans", Arial, sans-serif;
+  font-weight: bold;
+  font-size: 14px;
+  text-align: center;
+  padding: 4px 8px;
+  border: 2px solid #FF00FF;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* === SECTION CELLS === */
+.section-cell {
+  background-color: #000066;
+  border: 2px solid #008080;
+  min-width: 180px;
+}
+
+.section-content {
+  padding: 6px;
+  color: #FFFFFF;
+  font-size: 12px;
+}
+
+/* === PORTAL BUTTONS === */
+.portal-btn {
+  display: inline-block;
+  background-color: #008080;
+  color: #FFFFFF;
+  font-family: "Comic Sans MS", Arial, sans-serif;
+  font-weight: bold;
+  font-size: 12px;
+  text-decoration: none;
+  padding: 5px 10px;
+  border: 2px outset #00CCCC;
+  margin: 3px;
+  cursor: pointer;
+  text-align: center;
+  min-width: 120px;
+}
+
+.portal-btn:hover {
+  background-color: #00AAAA;
+  color: #FFD700;
+  border: 2px inset #008080;
+  text-decoration: none;
+}
+
+.portal-btn:visited {
+  color: #FFFFFF;
+}
+
+.portal-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 8px;
+}
+
+/* === VISITOR COUNTER === */
+.visitor-counter {
+  text-align: center;
+  font-family: "Courier New", Courier, monospace;
+  font-weight: bold;
+  font-size: 13px;
+  color: #FFD700;
+  border: 2px solid #FFD700;
+  padding: 4px 12px;
+  background-color: #000033;
+  display: inline-block;
+  margin: 4px auto;
+}
+
+.visitor-counter-wrapper {
+  text-align: center;
+  padding: 4px;
+}
+
+/* === NEW! BADGE (blinking animation) === */
+@keyframes blink {
+  0%   { opacity: 1; }
+  49%  { opacity: 1; }
+  50%  { opacity: 0; }
+  99%  { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.new-badge {
+  display: inline-block;
+  background-color: #FF0000;
+  color: #FFD700;
+  font-family: "Comic Sans MS", Arial, sans-serif;
+  font-weight: bold;
+  font-size: 10px;
+  padding: 1px 4px;
+  border: 1px solid #FF00FF;
+  animation: blink 1s step-end infinite;
+  vertical-align: middle;
+  margin-left: 4px;
+  text-transform: uppercase;
+}
+
+/* === UNDER CONSTRUCTION === */
+.under-construction {
+  border: 4px dashed #FFD700;
+  background: repeating-linear-gradient(
+    45deg,
+    #000000,
+    #000000 10px,
+    #FFD700 10px,
+    #FFD700 20px
+  );
+  padding: 12px;
+  text-align: center;
+  color: #000000;
+  font-weight: bold;
+  font-size: 14px;
+  margin: 8px 0;
+}
+
+.under-construction-inner {
+  background-color: rgba(0, 0, 128, 0.85);
+  color: #FFD700;
+  padding: 8px;
+  font-family: "Comic Sans MS", Arial, sans-serif;
+}
+
+/* === PAGE TITLE / HEADER === */
+.page-title {
+  text-align: center;
+  color: #FFD700;
+  font-family: "Comic Sans MS", Arial, sans-serif;
+  font-size: 26px;
+  font-weight: bold;
+  text-shadow: 2px 2px #FF00FF;
+  padding: 8px;
+  border-bottom: 3px double #008080;
+}
+
+.page-subtitle {
+  text-align: center;
+  color: #FF00FF;
+  font-size: 12px;
+  font-style: italic;
+  margin-bottom: 6px;
+}
+
+/* === FOOTER === */
+.page-footer {
+  text-align: center;
+  color: #008080;
+  font-size: 11px;
+  border-top: 2px solid #008080;
+  padding: 6px;
+  margin-top: 8px;
+}
+
+/* === NEWS ITEMS === */
+.news-item {
+  margin: 4px 0;
+  padding: 2px 0;
+  border-bottom: 1px dotted #008080;
+  font-size: 12px;
+}
+
+.news-item a {
+  color: #FFD700;
+}
+
+/* === PLACEHOLDER CONTENT DIVS === */
+#weather-content {
+  min-height: 80px;
+  color: #FFFFFF;
+}
+
+#reddit-content {
+  min-height: 80px;
+  color: #FFFFFF;
+}
+
+#news-content {
+  min-height: 80px;
+  color: #FFFFFF;
+}
+
+#tech-news-content {
+  min-height: 80px;
+  color: #FFFFFF;
+}
+
+/* === HORIZONTAL RULE === */
+hr {
+  border: 1px solid #008080;
+  margin: 4px 0;
+}
