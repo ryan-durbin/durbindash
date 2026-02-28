@@ -17,25 +17,32 @@ describe('GET /api/weather', () => {
   });
 
   it('returns 200 with weather JSON when fetchWeather succeeds', async () => {
-    const mockData = {
+    const mockWeather = {
       temperature: 32.5,
       description: 'Partly cloudy',
       windSpeed: 10.2,
       humidity: 75,
       highTemp: 38.0,
       lowTemp: 28.0,
+      forecast: [
+        { date: '2026-03-01', high: 36.0, low: 23.5, description: 'Slight rain' },
+        { date: '2026-03-02', high: 37.5, low: 24.0, description: 'Slight snow' },
+        { date: '2026-03-03', high: 34.2, low: 21.0, description: 'Clear sky' },
+      ],
     };
-    fetchWeather.mockResolvedValue(mockData);
+    fetchWeather.mockResolvedValue(mockWeather);
 
     const res = await request(app).get('/api/weather');
     expect(res.status).toBe(200);
-    expect(res.body).toEqual(mockData);
+    expect(res.body).toEqual(mockWeather);
     expect(res.body).toHaveProperty('temperature');
     expect(res.body).toHaveProperty('description');
     expect(res.body).toHaveProperty('windSpeed');
     expect(res.body).toHaveProperty('humidity');
     expect(res.body).toHaveProperty('highTemp');
     expect(res.body).toHaveProperty('lowTemp');
+    expect(Array.isArray(res.body.forecast)).toBe(true);
+    expect(res.body.forecast).toHaveLength(3);
   });
 
   it('returns 502 with error JSON when fetchWeather throws', async () => {

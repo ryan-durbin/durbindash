@@ -29,8 +29,10 @@ describe('fetchWeather', () => {
         weather_code: 3,
       },
       daily: {
-        temperature_2m_max: [35.1],
-        temperature_2m_min: [22.8],
+        time: ['2026-02-28', '2026-03-01', '2026-03-02', '2026-03-03'],
+        temperature_2m_max: [35.1, 36.0, 37.5, 34.2],
+        temperature_2m_min: [22.8, 23.5, 24.0, 21.0],
+        weather_code: [3, 61, 71, 0],
       },
     };
 
@@ -48,6 +50,35 @@ describe('fetchWeather', () => {
       humidity: 75,
       highTemp: 35.1,
       lowTemp: 22.8,
+    });
+
+    expect(Array.isArray(result.forecast)).toBe(true);
+    expect(result.forecast).toHaveLength(3);
+
+    expect(result.forecast[0]).toEqual({
+      date: '2026-03-01',
+      high: 36.0,
+      low: 23.5,
+      description: 'Slight rain',
+    });
+    expect(result.forecast[1]).toEqual({
+      date: '2026-03-02',
+      high: 37.5,
+      low: 24.0,
+      description: 'Slight snow',
+    });
+    expect(result.forecast[2]).toEqual({
+      date: '2026-03-03',
+      high: 34.2,
+      low: 21.0,
+      description: 'Clear sky',
+    });
+
+    result.forecast.forEach((day) => {
+      expect(typeof day.date).toBe('string');
+      expect(typeof day.high).toBe('number');
+      expect(typeof day.low).toBe('number');
+      expect(typeof day.description).toBe('string');
     });
   });
 
