@@ -1,3 +1,4 @@
+/** @jest-environment jsdom */
 /**
  * tests/news.frontend.test.js
  * Tests for public/js/news.js frontend module using jsdom environment.

@@ -20,6 +20,14 @@
     "supertest": "^7.2.2"
   },
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "testMatch": ["**/tests/*.test.js"],
+    "testPathIgnorePatterns": [
+      "tests/reddit.route.test.js",
+      "tests/reddit.frontend.test.js",
+      "tests/readme.test.js",
+      "tests/deploy.test.js"
+    ],
+    "forceExit": true
   }
 }

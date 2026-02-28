@@ -4,23 +4,14 @@ const express = require('express');
 const path = require('path');
 const { fetchWeather } = require('./server/weather');
 const { fetchFeed } = require('./server/news');
+const { getSubredditPosts, ALLOWED_SUBREDDITS } = require('./server/reddit');
+const { router: openclawRouter } = require('./server/openclaw');
 
 const app = express();
 const PORT = process.env.PORT || 7748;
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
-
-// API routers
-const weatherRouter = require('./server/weather');
-const newsRouter = require('./server/news');
-const redditRouter = require('./server/reddit');
-const openclawRouter = require('./server/openclaw');
-
-app.use('/api/weather', weatherRouter);
-app.use('/api/news', newsRouter);
-app.use('/api/reddit', redditRouter);
-app.use('/api/openclaw', openclawRouter);
 
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', app: 'durbindash' });
@@ -50,8 +41,29 @@ app.get('/api/news', async (req, res) => {
   }
 });
 
-if (require.main === module) app.listen(PORT, () => {
-  console.log(`DurbinDash running on http://localhost:${PORT}`);
+app.get('/api/reddit', async (req, res) => {
+  const { sub } = req.query;
+  if (!sub || !ALLOWED_SUBREDDITS.includes(sub)) {
+    return res.status(400).json({ error: `sub must be one of: ${ALLOWED_SUBREDDITS.join(', ')}` });
+  }
+  try {
+    const posts = await getSubredditPosts(sub);
+    res.json(posts);
+  } catch (err) {
+    res.status(502).json({ error: 'Failed to fetch Reddit data' });
+  }
 });
+
+app.use('/api/openclaw', openclawRouter);
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`DurbinDash running on http://localhost:${PORT}`);
+  });
+}
 
 module.exports = app;

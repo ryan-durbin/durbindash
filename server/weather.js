@@ -1,6 +1,6 @@
 'use strict';
 
-const fetch = require('node-fetch').default;
+const fetch = require('node-fetch');
 
 const WMO_CODES = {
   0: 'Clear sky',
