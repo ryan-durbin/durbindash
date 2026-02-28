@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>DurbinDash - Ryan's Personal Portal</title>
+  <link rel='stylesheet' href='styles.css'>
+</head>
+<body>
+
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr>
+    <td colspan="2" class="marquee-row">
+      <marquee behavior="scroll" direction="left" scrollamount="4">
+        &#9733; WELCOME TO DURBINDASH :: YOUR PERSONAL WEB PORTAL :: EST. 2026 &#9733;
+      </marquee>
+    </td>
+  </tr>
+</table>
+
+<table width="100%" cellpadding="4" cellspacing="2" border="0" class="main-table">
+  <tr>
+    <td width="30%" class="section-cell weather-cell" valign="top">
+      <div class="section-header">WEATHER</div>
+      <div id="weather-widget">
+        <p><em>Loading weather data...</em></p>
+      </div>
+    </td>
+    <td width="70%" class="section-cell news-cell" valign="top">
+      <div class="section-header">TODAY'S NEWS <span class='new-badge'>&#9733; NEW!</span></div>
+      <div id="news-content">
+        <p><em>Loading latest news...</em></p>
+      </div>
+    </td>
+  </tr>
+
+  <tr>
+    <td colspan="2" class="section-cell mystuff-cell" valign="top">
+      <div class="section-header">MY STUFF :: APP PORTAL</div>
+      <div class="portal-grid">
+        <a href="http://10.0.1.132:8123" class="portal-btn" target="_blank">Home Assistant</a>
+        <a href="http://10.0.1.132:7747" class="portal-btn" target="_blank">ClawStats</a>
+        <a href="http://10.0.1.132:5678" class="portal-btn" target="_blank">n8n</a>
+        <a href="http://10.0.1.132:3333" class="portal-btn" target="_blank">Antfarm</a>
+        <a href="http://10.0.1.132:8080" class="portal-btn" target="_blank">Vaultwarden</a>
+        <a href="http://10.0.1.132:2283" class="portal-btn" target="_blank">Immich</a>
+      </div>
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%" class="section-cell reddit-cell" valign="top">
+      <div class="section-header">WHAT'S HOT ON REDDIT <span class='new-badge'>&#9733; NEW!</span></div>
+      <div id="reddit-content">
+        <p><em>Loading Reddit hot posts...</em></p>
+      </div>
+    </td>
+    <td width="50%" class="section-cell technews-cell" valign="top">
+      <div class="section-header">TECH NEWS <span class='new-badge'>&#9733; NEW!</span></div>
+      <div id="tech-news-content">
+        <p><em>Loading tech news...</em></p>
+      </div>
+    </td>
+  </tr>
+
+  <tr>
+    <td colspan="2" class="section-cell footer-cell" valign="top">
+      <div id="under-construction" class="under-construction">
+        &#9888; UNDER CONSTRUCTION &#9888;
+        <br><small>This section is reserved for future dynamic content. Check back soon!</small>
+      </div>
+      <div class="visitor-counter">Visitors: 001337</div>
+    </td>
+  </tr>
+</table>
+
+<script src="js/weather.js"></script>
+</body>
+</html>
