@@ -50,3 +50,51 @@ test('server.js exists', () => {
 test('README.md exists', () => {
   assert.ok(fs.existsSync(path.join(root, 'README.md')), 'README.md should exist');
 });
+
+// =============================================
+// US-002: styles.css content tests
+// =============================================
+
+test('styles.css exists in public/', () => {
+  assert.ok(fs.existsSync(path.join(root, 'public', 'styles.css')), 'styles.css should exist');
+});
+
+test('styles.css contains .section-header with Comic Sans MS font', () => {
+  const css = fs.readFileSync(path.join(root, 'public', 'styles.css'), 'utf8');
+  assert.ok(css.includes('.section-header'), '.section-header rule should exist');
+  assert.ok(css.includes('Comic Sans MS'), '.section-header should reference Comic Sans MS');
+  assert.ok(css.includes('background-color'), '.section-header should have background-color');
+});
+
+test('styles.css contains .portal-btn with teal background', () => {
+  const css = fs.readFileSync(path.join(root, 'public', 'styles.css'), 'utf8');
+  assert.ok(css.includes('.portal-btn'), '.portal-btn rule should exist');
+  assert.ok(css.includes('#008080'), '.portal-btn should have teal (#008080) background');
+});
+
+test('styles.css contains @keyframes blink animation', () => {
+  const css = fs.readFileSync(path.join(root, 'public', 'styles.css'), 'utf8');
+  assert.ok(css.includes('@keyframes blink'), '@keyframes blink should exist');
+  assert.ok(css.includes('.new-badge'), '.new-badge rule should exist');
+});
+
+test('styles.css contains .visitor-counter rule', () => {
+  const css = fs.readFileSync(path.join(root, 'public', 'styles.css'), 'utf8');
+  assert.ok(css.includes('.visitor-counter'), '.visitor-counter rule should exist');
+});
+
+test('styles.css contains table and td layout rules', () => {
+  const css = fs.readFileSync(path.join(root, 'public', 'styles.css'), 'utf8');
+  assert.ok(css.includes('border-collapse: collapse'), 'table should have border-collapse: collapse');
+  assert.ok(css.includes('vertical-align: top'), 'td should have vertical-align: top');
+});
+
+test('styles.css contains .under-construction rule', () => {
+  const css = fs.readFileSync(path.join(root, 'public', 'styles.css'), 'utf8');
+  assert.ok(css.includes('.under-construction'), '.under-construction rule should exist');
+});
+
+test('styles.css has navy background on body (#000080)', () => {
+  const css = fs.readFileSync(path.join(root, 'public', 'styles.css'), 'utf8');
+  assert.ok(css.includes('#000080'), 'body should have navy (#000080) in stylesheet');
+});

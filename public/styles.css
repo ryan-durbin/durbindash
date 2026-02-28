@@ -1,0 +1,194 @@
+/* ==============================================
+   DurbinDash Styles - 90s Yahoo/AOL Portal Vibes
+   Color Palette:
+   Navy:    #000080
+   Teal:    #008080
+   Yellow:  #FFD700
+   Magenta: #FF00FF
+   ============================================== */
+
+/* --- Base / Body --- */
+body {
+    background-color: #000080;
+    color: #FFFFFF;
+    font-family: 'Comic Sans MS', 'Comic Sans', Arial, sans-serif;
+    margin: 0;
+    padding: 4px;
+    font-size: 13px;
+}
+
+/* --- Table Layout --- */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+td {
+    vertical-align: top;
+    padding: 6px;
+}
+
+/* --- Section Header Banners --- */
+.section-header {
+    background-color: #FFD700;
+    color: #000080;
+    font-family: 'Comic Sans MS', 'Comic Sans', Arial, sans-serif;
+    font-weight: bold;
+    font-size: 14px;
+    text-align: center;
+    padding: 4px 8px;
+    border: 2px solid #FF00FF;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* --- Portal / App Link Buttons --- */
+.portal-btn {
+    display: inline-block;
+    background-color: #008080;
+    color: #FFFFFF;
+    font-family: 'Comic Sans MS', 'Comic Sans', Arial, sans-serif;
+    font-weight: bold;
+    font-size: 12px;
+    text-decoration: none;
+    padding: 6px 12px;
+    margin: 4px;
+    border: 2px outset #00FFFF;
+    cursor: pointer;
+}
+
+.portal-btn:hover {
+    background-color: #00AAAA;
+    border-style: inset;
+    color: #FFD700;
+    text-decoration: none;
+}
+
+/* --- Visitor Counter --- */
+.visitor-counter {
+    border: 3px solid #FFD700;
+    color: #FFD700;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    font-size: 14px;
+    text-align: center;
+    padding: 6px;
+    background-color: #000033;
+    display: inline-block;
+}
+
+/* --- NEW! Badge Animation --- */
+@keyframes blink {
+    0%   { opacity: 1; }
+    49%  { opacity: 1; }
+    50%  { opacity: 0; }
+    99%  { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+.new-badge {
+    display: inline-block;
+    background-color: #FF0000;
+    color: #FFFFFF;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    font-size: 10px;
+    padding: 1px 4px;
+    margin-left: 4px;
+    animation: blink 1s step-end infinite;
+    border: 1px solid #FF9900;
+    vertical-align: middle;
+}
+
+/* --- Marquee --- */
+.marquee-bar {
+    background-color: #FF00FF;
+    color: #FFFF00;
+    font-family: 'Comic Sans MS', 'Comic Sans', Arial, sans-serif;
+    font-weight: bold;
+    font-size: 14px;
+    padding: 4px 0;
+    border-top: 3px solid #FFD700;
+    border-bottom: 3px solid #FFD700;
+}
+
+/* --- Under Construction --- */
+.under-construction {
+    border: 6px solid;
+    border-image: repeating-linear-gradient(
+        45deg,
+        #FFD700 0px,
+        #FFD700 10px,
+        #000000 10px,
+        #000000 20px
+    ) 6;
+    padding: 10px;
+    text-align: center;
+    background-color: #1a1a00;
+    color: #FFD700;
+    font-weight: bold;
+}
+
+/* --- Section Cells --- */
+.section-cell {
+    background-color: #000066;
+    border: 2px solid #008080;
+    padding: 0;
+}
+
+.section-content {
+    padding: 8px;
+    color: #FFFFFF;
+    font-size: 12px;
+}
+
+/* --- My Stuff / App Portal --- */
+.portal-section {
+    background-color: #001a33;
+    border: 3px solid #FFD700;
+    padding: 10px;
+    text-align: center;
+}
+
+/* --- Links --- */
+a {
+    color: #00FFFF;
+    text-decoration: underline;
+}
+
+a:visited {
+    color: #FF00FF;
+}
+
+a:hover {
+    color: #FFD700;
+}
+
+/* --- Placeholder content divs --- */
+.content-placeholder {
+    color: #AAAAAA;
+    font-style: italic;
+    font-size: 11px;
+    padding: 8px;
+}
+
+/* --- Page wrapper --- */
+#page-wrapper {
+    max-width: 1024px;
+    margin: 0 auto;
+    background-color: #000066;
+    border: 3px solid #FF00FF;
+}
+
+/* --- Page title bar --- */
+.page-title-bar {
+    background: linear-gradient(to right, #000080, #008080, #000080);
+    color: #FFD700;
+    font-family: 'Comic Sans MS', 'Comic Sans', Arial, sans-serif;
+    font-weight: bold;
+    font-size: 22px;
+    text-align: center;
+    padding: 10px;
+    border-bottom: 4px solid #FFD700;
+    text-shadow: 2px 2px #FF00FF;
+}
