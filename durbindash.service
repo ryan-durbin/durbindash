@@ -1,0 +1,14 @@
+[Unit]
+Description=DurbinDash — 90s-style personal dashboard
+After=network.target
+
+[Service]
+Type=simple
+User=ryandurbin
+WorkingDirectory=/home/ryandurbin/projects/durbindash
+ExecStart=/usr/bin/npm start
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target
