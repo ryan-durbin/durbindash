@@ -1,5 +1,5 @@
 [Unit]
-Description=DurbinDash Node.js Application
+Description=DurbinDash — 90s-style personal dashboard
 After=network.target
 
 [Service]
