@@ -1,107 +1,93 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <title>DurbinDash - Ryan's Personal Portal</title>
-  <link rel='stylesheet' href='styles.css'>
-  <link rel='stylesheet' href='/css/news.css'>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DurbinDash - Your Personal Web Portal</title>
+  <style>
+    body { background: #c0c0c0; font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif; margin: 0; padding: 0; color: #000080; }
+    marquee { background: #000080; color: #ffff00; font-size: 1.1em; padding: 4px 0; font-weight: bold; }
+    #header { background: linear-gradient(to right, #000080, #4040ff); color: #ffff00; text-align: center; padding: 10px; border-bottom: 4px ridge #ffff00; }
+    #header h1 { margin: 0; font-size: 2.2em; text-shadow: 2px 2px #000; }
+    #visitor-counter { background: #000; color: #00ff00; display: inline-block; padding: 2px 8px; font-family: 'Courier New', monospace; font-size: 0.9em; border: 2px inset #888; margin-top: 4px; }
+    #main-layout { display: flex; flex-wrap: wrap; gap: 8px; padding: 8px; }
+    .widget { background: #ffffff; border: 2px groove #888; padding: 8px; min-width: 260px; flex: 1 1 260px; }
+    .widget-title { background: #000080; color: #ffffff; font-weight: bold; padding: 3px 6px; margin: -8px -8px 8px -8px; font-size: 1em; border-bottom: 2px solid #ffff00; }
+    .news-subheader { font-weight: bold; color: #cc0000; font-size: 1em; margin: 6px 0 4px; }
+    .news-item { margin: 3px 0; font-size: 0.9em; }
+    .news-item a { color: #000080; text-decoration: underline; }
+    .news-item a:hover { color: #cc0000; }
+    .reddit-sub-header { color: #ff6600; font-weight: bold; margin: 8px 0 4px; }
+    .reddit-post { margin: 3px 0; font-size: 0.88em; }
+    .reddit-score { color: #ff6600; margin-right: 4px; }
+    .reddit-title { color: #000080; text-decoration: none; }
+    .reddit-title:hover { color: #cc0000; text-decoration: underline; }
+    .reddit-comments { color: #666; font-size: 0.82em; margin-left: 4px; }
+    .loading { color: #888; font-style: italic; font-size: 0.88em; }
+    .error { color: #cc0000; font-size: 0.88em; }
+    #app-portal { flex: 1 1 100%; }
+    .portal-grid { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+    .portal-app { background: #e0e0e0; border: 2px outset #888; padding: 8px 12px; text-align: center; text-decoration: none; color: #000080; font-size: 0.88em; font-weight: bold; min-width: 80px; }
+    .portal-app:hover { background: #000080; color: #ffff00; border: 2px inset #888; }
+    #footer { background: #000080; color: #c0c0c0; text-align: center; padding: 6px; font-size: 0.8em; margin-top: 8px; }
+    #footer a { color: #ffff00; }
+  </style>
 </head>
 <body>
+  <marquee behavior="scroll" direction="left">🌐 Welcome to DurbinDash — Your Personal Web Portal! 🦅 Powered by OpenClaw &nbsp;&nbsp;&nbsp; ⭐ Best viewed at 1024x768 &nbsp;&nbsp;&nbsp; 🔥 Hot Reddit Links! &nbsp;&nbsp;&nbsp; 📰 Latest AI &amp; Tech News!</marquee>
 
-<marquee behavior="scroll" direction="left" scrollamount="4" bgcolor="#000080" style="color:#ffff00;font-family:'Comic Sans MS',cursive;font-weight:bold;padding:6px;font-size:16px;">
-  &#9658; WELCOME TO DURBINDASH :: YOUR PERSONAL WEB PORTAL :: EST. 2026 &#9658; WELCOME TO DURBINDASH :: YOUR PERSONAL WEB PORTAL :: EST. 2026 &#9658;
-</marquee>
+  <div id="header">
+    <h1>🏠 DurbinDash</h1>
+    <div>Your Personal Web Portal — Est. 2024</div>
+    <div id="visitor-counter">👁 Visitors: <span id="visit-count">001,337</span></div>
+  </div>
 
-<table width="100%" border="2" cellpadding="6" cellspacing="2" bgcolor="#c0c0c0">
+  <div id="main-layout">
+    <div class="widget" id="weather-widget">
+      <div class="widget-title">🌤 Current Weather</div>
+      <div class="loading">Loading weather...</div>
+    </div>
 
-  <!-- ROW 1: WEATHER | AI NEWS -->
-  <tr>
-    <td width="30%" valign="top" bgcolor="#003366">
-      <div class="section-header">&#9728; WEATHER</div>
-      <div id="weather-content">
-        <p style="color:#ffffff;font-family:Arial,sans-serif;font-size:13px;">
-          Loading weather data...<br>
-          <em>Anchorage, AK</em>
-        </p>
+    <div class="widget" id="news-ai">
+      <div class="widget-title">🤖 AI News</div>
+      <div class="news-subheader">🦅 OpenClaw Updates</div>
+      <div class="loading">Loading AI news...</div>
+    </div>
+
+    <div class="widget" id="news-tech">
+      <div class="widget-title">💻 Tech News</div>
+      <div class="loading">Loading tech news...</div>
+    </div>
+
+    <div class="widget" id="news-hn">
+      <div class="widget-title">🔶 Hacker News</div>
+      <div class="loading">Loading HN...</div>
+    </div>
+
+    <div class="widget" id="reddit-feed">
+      <div class="widget-title">🤖 Reddit Hot Posts</div>
+      <div class="loading">Loading Reddit...</div>
+    </div>
+
+    <div class="widget" id="app-portal">
+      <div class="widget-title">🚀 My Apps Portal</div>
+      <div class="portal-grid">
+        <a class="portal-app" href="/health">🔧 System Status</a>
+        <a class="portal-app" href="/api/weather">🌤 Weather API</a>
+        <a class="portal-app" href="/api/news">📰 News API</a>
+        <a class="portal-app" href="/api/reddit">🤖 Reddit API</a>
+        <a class="portal-app" href="/api/openclaw">🦅 OpenClaw API</a>
       </div>
-    </td>
-    <td width="70%" valign="top" bgcolor="#004040">
-      <div class="section-header">
-        &#128200; AI NEWS
-        <span class='badge-new'>NEW!</span>
-      </div>
-      <div id="news-ai">
-        <div style="margin-bottom:8px;font-family:Arial,sans-serif;font-size:14px;font-weight:bold;color:#00ff99;">
-          🦅 OpenClaw Updates
-          <span style="cursor:pointer;font-size:11px;color:#88ccff;font-weight:normal;"
-                title="OpenClaw is your AI personal assistant platform &#8212; running locally on your homelab!">
-            [What Is OpenClaw?]
-          </span>
-        </div>
-        <p style="color:#ffffff;font-family:Arial,sans-serif;font-size:13px;" id="openclaw-loading">
-          Loading OpenClaw updates...
-        </p>
-      </div>
-    </td>
-  </tr>
+    </div>
+  </div>
 
-  <!-- ROW 2: TECH NEWS (Ars Technica + The Verge) -->
-  <tr>
-    <td colspan="2" valign="top" bgcolor="#002244">
-      <div class="section-header">&#128187; TECH NEWS (ARS TECHNICA + THE VERGE)</div>
-      <div id="news-tech">
-        <p style="color:#ffffff;font-family:Arial,sans-serif;font-size:13px;">
-          Loading tech news...
-        </p>
-      </div>
-    </td>
-  </tr>
+  <div id="footer">
+    &copy; 2024 DurbinDash &mdash; Built with ❤️ in Anchorage, AK &mdash;
+    <a href="https://github.com/ryandurbin">GitHub</a>
+  </div>
 
-  <!-- ROW 3: HACKER NEWS -->
-  <tr>
-    <td colspan="2" valign="top" bgcolor="#333300">
-      <div class="section-header">
-        &#128293; HACKER NEWS
-        <span class='badge-new'>NEW!</span>
-      </div>
-      <div id="news-hn">
-        <p style="color:#ffffff;font-family:Arial,sans-serif;font-size:13px;">
-          Loading Hacker News...
-        </p>
-      </div>
-    </td>
-  </tr>
-
-  <!-- ROW 4: MY STUFF app portal -->
-  <tr>
-    <td colspan="2" valign="top" bgcolor="#800080" align="center">
-      <div class="section-header">&#9733; MY STUFF &#9733; YOUR PERSONAL APP PORTAL &#9733;</div>
-      <div id="app-portal" style="padding:10px;">
-        <a href="http://10.0.1.132:8123" class="portal-btn" target="_blank">&#127968; Home Assistant</a>
-        <a href="http://10.0.1.132:7747" class="portal-btn" target="_blank">&#128202; ClawStats</a>
-        <a href="http://10.0.1.132:5678" class="portal-btn" target="_blank">&#9881; n8n</a>
-        <a href="http://10.0.1.132:3333" class="portal-btn" target="_blank">&#127807; Antfarm</a>
-        <a href="http://10.0.1.132:8080" class="portal-btn" target="_blank">&#128272; Vaultwarden</a>
-        <a href="http://10.0.1.132:2283" class="portal-btn" target="_blank">&#128247; Immich</a>
-      </div>
-    </td>
-  </tr>
-
-  <!-- ROW 5: Under Construction + Visitor Counter -->
-  <tr>
-    <td colspan="2" align="center" bgcolor="#1a1a2e">
-      <div id="under-construction" class="under-construction">
-        &#9888; UNDER CONSTRUCTION &#9888;<br>
-        <small style="color:#ffff00;">More awesome content coming soon! This site is always being improved!</small>
-      </div>
-      <div class="visitor-counter">Visitors: 001337</div>
-    </td>
-  </tr>
-
-</table>
-
-<script src="app.js"></script>
-<script src="/js/news.js"></script>
-<script src="/js/openclaw.js"></script>
+  <script src="/js/weather.js"></script>
+  <script src="/js/news.js"></script>
+  <script src="/js/reddit.js"></script>
 </body>
 </html>

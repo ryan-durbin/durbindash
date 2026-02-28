@@ -1,37 +1,30 @@
-'use strict';
+const express = require('express');
+const router = express.Router();
 
-const ALLOWED_SUBREDDITS = ['artificial', 'LocalLLaMA', 'homelab', 'selfhosted', 'homeassistant'];
-const CACHE_TTL_MS = 30 * 60 * 1000; // 30 minutes
+const SUBREDDITS = ['programming', 'technology', 'artificial'];
 
-const cache = new Map();
-
-async function getSubredditPosts(sub) {
-  const now = Date.now();
-  const cached = cache.get(sub);
-  if (cached && cached.expiresAt > now) {
-    return cached.posts;
+router.get('/', async (req, res) => {
+  try {
+    const fetch = (await import('node-fetch')).default;
+    const results = await Promise.all(SUBREDDITS.map(async sub => {
+      const resp = await fetch(`https://www.reddit.com/r/${sub}/hot.json?limit=5`, {
+        headers: { 'User-Agent': 'DurbinDash/1.0' }
+      });
+      const data = await resp.json();
+      return {
+        subreddit: sub,
+        posts: (data.data?.children || []).map(c => ({
+          title: c.data.title,
+          url: 'https://reddit.com' + c.data.permalink,
+          score: c.data.score,
+          comments: c.data.num_comments
+        }))
+      };
+    }));
+    res.json(results);
+  } catch (err) {
+    res.status(500).json({ error: 'Reddit fetch failed', detail: err.message });
   }
+});
 
-  const url = `https://www.reddit.com/r/${sub}/hot.json?limit=5`;
-  const res = await fetch(url, {
-    headers: { 'User-Agent': 'DurbinDash/1.0' }
-  });
-
-  if (!res.ok) {
-    throw new Error(`Reddit API returned ${res.status}`);
-  }
-
-  const data = await res.json();
-  const posts = data.data.children.map(({ data: p }) => ({
-    title: p.title,
-    url: p.url,
-    score: p.score,
-    num_comments: p.num_comments,
-    permalink: `https://www.reddit.com${p.permalink}`
-  }));
-
-  cache.set(sub, { posts, expiresAt: now + CACHE_TTL_MS });
-  return posts;
-}
-
-module.exports = { getSubredditPosts, ALLOWED_SUBREDDITS };
+module.exports = router;
