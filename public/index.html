@@ -1,202 +1,99 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <title>DurbinDash - Ryan's Personal Portal</title>
   <link rel='stylesheet' href='styles.css'>
-  <style>
-    .portal-category { width:100%; border-collapse:collapse; margin-bottom:14px; }
-    .portal-category .cat-header td {
-      background: #ffcc00; color: #000;
-      font-family: 'Comic Sans MS', cursive, sans-serif;
-      font-weight: bold; font-size: 15px;
-      padding: 6px 12px; border: 3px outset #ff9900; letter-spacing: 1px;
-    }
-    .portal-category .cat-items td { background: #1a0030; padding: 10px 12px; }
-    .portal-btn-lg {
-      display: inline-block; margin: 4px 6px 4px 0; padding: 8px 18px;
-      background: #c0c0c0; color: #000080;
-      font-family: 'Comic Sans MS', cursive, sans-serif;
-      font-weight: bold; font-size: 13px;
-      border: 3px outset #ffffff; text-decoration: none; cursor: pointer; vertical-align: middle;
-    }
-    .portal-btn-lg:hover { background: #ffff99; border-style: inset; color: #cc0000; }
-    .badge-coming-soon {
-      display: inline-block; background: #ffcc00; color: #000;
-      font-family: 'Comic Sans MS', cursive, sans-serif;
-      font-size: 10px; font-weight: bold; padding: 2px 6px;
-      border: 2px solid #ff6600; vertical-align: middle;
-      animation: blink-badge 1s step-start infinite;
-    }
-    @keyframes blink-badge { 0%,100%{opacity:1;} 50%{opacity:0;} }
-    .badge-running {
-      display: inline-block; background: #00cc44; color: #fff;
-      font-family: 'Comic Sans MS', cursive, sans-serif;
-      font-size: 10px; font-weight: bold; padding: 2px 6px;
-      border: 2px solid #007722; vertical-align: middle;
-    }
-    .portal-item-nolink {
-      display: inline-block; margin: 4px 6px 4px 0; padding: 8px 18px;
-      background: #888888; color: #cccccc;
-      font-family: 'Comic Sans MS', cursive, sans-serif;
-      font-weight: bold; font-size: 13px;
-      border: 3px inset #555555; vertical-align: middle; cursor: default;
-    }
-  
-    .openclaw-version { font-weight: bold; }
-    .openclaw-date { color: #666; }
-    .openclaw-subheader { font-size: 13px; font-weight: bold; margin: 6px 0 4px; }
-    .openclaw-entry { margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px dashed #ccc; }
-    .tooltip-trigger { cursor: help; border-bottom: 1px dotted #0000cc; position: relative; }
-    .tooltip-text { display: none; position: absolute; background: #ffffc0; border: 1px solid #999; padding: 4px 8px; font-size: 11px; max-width: 280px; z-index: 100; }
-    .tooltip-trigger:hover .tooltip-text { display: block; }
-  </style>
+  <link rel='stylesheet' href='/css/news.css'>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 </head>
 <body>
 
-<table width="100%" cellpadding="0" cellspacing="0" border="0">
+<marquee behavior="scroll" direction="left" scrollamount="4" bgcolor="#000080" style="color:#ffff00;font-family:'Comic Sans MS',cursive;font-weight:bold;padding:6px;font-size:16px;">
+  &#9658; WELCOME TO DURBINDASH :: YOUR PERSONAL WEB PORTAL :: EST. 2026 &#9658; WELCOME TO DURBINDASH :: YOUR PERSONAL WEB PORTAL :: EST. 2026 &#9658;
+</marquee>
+
+<table width="100%" border="2" cellpadding="6" cellspacing="2" bgcolor="#c0c0c0">
+
+  <!-- ROW 1: WEATHER | AI NEWS -->
   <tr>
-    <td colspan="2" class="marquee-row">
-      <marquee behavior="scroll" direction="left" scrollamount="4">
-        &#9733; WELCOME TO DURBINDASH :: YOUR PERSONAL WEB PORTAL :: EST. 2026 &#9733;
-      </marquee>
+    <td width="30%" valign="top" bgcolor="#003366">
+      <div class="section-header">&#9728; WEATHER</div>
+      <div id="weather-content">
+        <p style="color:#ffffff;font-family:Arial,sans-serif;font-size:13px;">
+          Loading weather data...<br>
+          <em>Anchorage, AK</em>
+        </p>
+      </div>
+    </td>
+    <td width="70%" valign="top" bgcolor="#004040">
+      <div class="section-header">
+        &#128200; AI NEWS
+        <span class='badge-new'>NEW!</span>
+      </div>
+      <div id="news-ai">
+        <p style="color:#ffffff;font-family:Arial,sans-serif;font-size:13px;">
+          Loading latest AI news...
+        </p>
+      </div>
     </td>
   </tr>
-</table>
 
-<table width="100%" cellpadding="4" cellspacing="2" border="0" class="main-table">
+  <!-- ROW 2: TECH NEWS (Ars Technica + The Verge) -->
   <tr>
-    <td width="30%" class="section-cell weather-cell" valign="top">
-      <div class="section-header">WEATHER</div>
-      <div id="weather-content"><p><em>Loading weather data...</em></p></div>
-    </td>
-    <td width="70%" class="section-cell news-cell" valign="top">
-      <div class="section-header">TODAY'S NEWS <span class='new-badge'>&#9733; NEW!</span></div>
-      <div id="news-content"><p><em>Loading latest news...</em></p></div>
+    <td colspan="2" valign="top" bgcolor="#002244">
+      <div class="section-header">&#128187; TECH NEWS (ARS TECHNICA + THE VERGE)</div>
+      <div id="news-tech">
+        <p style="color:#ffffff;font-family:Arial,sans-serif;font-size:13px;">
+          Loading tech news...
+        </p>
+      </div>
     </td>
   </tr>
 
-  <!-- MY STUFF APP PORTAL -->
+  <!-- ROW 3: HACKER NEWS -->
   <tr>
-    <td colspan="2" class="section-cell mystuff-cell" valign="top">
+    <td colspan="2" valign="top" bgcolor="#333300">
+      <div class="section-header">
+        &#128293; HACKER NEWS
+        <span class='badge-new'>NEW!</span>
+      </div>
+      <div id="news-hn">
+        <p style="color:#ffffff;font-family:Arial,sans-serif;font-size:13px;">
+          Loading Hacker News...
+        </p>
+      </div>
+    </td>
+  </tr>
+
+  <!-- ROW 4: MY STUFF app portal -->
+  <tr>
+    <td colspan="2" valign="top" bgcolor="#800080" align="center">
       <div class="section-header">&#9733; MY STUFF &#9733; YOUR PERSONAL APP PORTAL &#9733;</div>
-      <div id="app-portal" style="padding:12px;">
-
-        <!-- Smart Home -->
-        <table class="portal-category">
-          <tr class="cat-header"><td>&#127968; Smart Home</td></tr>
-          <tr class="cat-items"><td>
-            <a href="http://10.0.1.132:8123" class="portal-btn-lg" target="_blank" rel="noopener">&#127968; Home Assistant</a>
-          </td></tr>
-        </table>
-
-        <!-- Media & Files -->
-        <table class="portal-category">
-          <tr class="cat-header"><td>&#128247; Media &amp; Files</td></tr>
-          <tr class="cat-items"><td>
-            <a href="http://10.0.1.132:2283" class="portal-btn-lg" target="_blank" rel="noopener">&#128247; Immich (Photos)</a>
-          </td></tr>
-        </table>
-
-        <!-- Security & Access -->
-        <table class="portal-category">
-          <tr class="cat-header"><td>&#128272; Security &amp; Access</td></tr>
-          <tr class="cat-items"><td>
-            <a href="http://10.0.1.132:8080" class="portal-btn-lg" target="_blank" rel="noopener">&#128272; Vaultwarden</a>
-            <a href="https://10.0.1.132:9443" class="portal-btn-lg" target="_blank" rel="noopener">&#128736; Portainer</a>
-            <a href="http://10.0.1.132:8080/dashboard/" class="portal-btn-lg" target="_blank" rel="noopener">&#128204; Traefik Dashboard</a>
-          </td></tr>
-        </table>
-
-        <!-- Cameras -->
-        <table class="portal-category">
-          <tr class="cat-header"><td>&#128249; Cameras</td></tr>
-          <tr class="cat-items"><td>
-            <a href="http://10.0.1.132:5000" class="portal-btn-lg" target="_blank" rel="noopener">&#128249; Frigate NVR</a>
-          </td></tr>
-        </table>
-
-        <!-- Automation & Dev -->
-        <table class="portal-category">
-          <tr class="cat-header"><td>&#129302; Automation &amp; Dev</td></tr>
-          <tr class="cat-items"><td>
-            <a href="http://10.0.1.132:5678" class="portal-btn-lg" target="_blank" rel="noopener">&#9881; n8n</a>
-            <a href="http://10.0.1.132:3333" class="portal-btn-lg" target="_blank" rel="noopener">&#127807; Antfarm Dashboard</a>
-            <a href="http://10.0.1.132:7747" class="portal-btn-lg" target="_blank" rel="noopener">&#128202; ClawStats</a>
-          </td></tr>
-        </table>
-
-        <!-- Projects (Under Construction) -->
-        <table class="portal-category">
-          <tr class="cat-header"><td>&#128679; Projects (Under Construction)</td></tr>
-          <tr class="cat-items"><td>
-            <span class="portal-item-nolink">&#127381; Kudoz &nbsp;<span class="badge-coming-soon">COMING SOON</span></span>
-            <a href="https://radiamaps.com" class="portal-btn-lg" target="_blank" rel="noopener">&#127759; RadiaMaps</a>
-            <span class="portal-item-nolink">&#127183; Card Counter &nbsp;<span class="badge-coming-soon">COMING SOON</span></span>
-            <span class="portal-item-nolink">&#127783; Weather Dash &nbsp;<span class="badge-coming-soon">COMING SOON</span></span>
-            <span class="portal-item-nolink">&#128197; WMT Calendar Sync &nbsp;<span class="badge-running">RUNNING</span></span>
-            <a href="http://10.0.1.132:7748" class="portal-btn-lg" target="_blank" rel="noopener">&#128187; DurbinDash</a>
-          </td></tr>
-        </table>
-
+      <div id="app-portal" style="padding:10px;">
+        <a href="http://10.0.1.132:8123" class="portal-btn" target="_blank">&#127968; Home Assistant</a>
+        <a href="http://10.0.1.132:7747" class="portal-btn" target="_blank">&#128202; ClawStats</a>
+        <a href="http://10.0.1.132:5678" class="portal-btn" target="_blank">&#9881; n8n</a>
+        <a href="http://10.0.1.132:3333" class="portal-btn" target="_blank">&#127807; Antfarm</a>
+        <a href="http://10.0.1.132:8080" class="portal-btn" target="_blank">&#128272; Vaultwarden</a>
+        <a href="http://10.0.1.132:2283" class="portal-btn" target="_blank">&#128247; Immich</a>
       </div>
     </td>
   </tr>
 
+  <!-- ROW 5: Under Construction + Visitor Counter -->
   <tr>
-    <td width="50%" class="section-cell reddit-cell" valign="top">
-      <div class="section-header">WHAT'S HOT ON REDDIT <span class='new-badge'>&#9733; NEW!</span></div>
-      <div id="reddit-content"><p><em>Loading Reddit hot posts...</em></p></div>
-    </td>
-    <td width="50%" class="section-cell technews-cell" valign="top">
-      <div class="section-header">TECH NEWS <span class='new-badge'>&#9733; NEW!</span></div>
-      <div id="tech-news-content"><p><em>Loading tech news...</em></p></div>
-    </td>
-  </tr>
-
-    <tr>
-    <td colspan="2" class="section-cell" id="news-ai" valign="top">
-      <div class="section-header">AI &amp; HOMELAB NEWS <span class="new-badge">&#9733; NEW!</span></div>
-      <div class="openclaw-subheader">
-        &#129415; OpenClaw Updates
-        <span class="tooltip-trigger"> [?]<span class="tooltip-text">OpenClaw is your AI personal assistant platform &mdash; running locally on your homelab!</span></span>
-      </div>
-      <div id="openclaw-content"><p><em>Loading OpenClaw updates...</em></p></div>
-    </td>
-  </tr>
-
-<tr>
-    <td colspan="2" class="section-cell footer-cell" valign="top">
+    <td colspan="2" align="center" bgcolor="#1a1a2e">
       <div id="under-construction" class="under-construction">
-        &#9888; UNDER CONSTRUCTION &#9888;
-        <br><small>This section is reserved for future dynamic content. Check back soon!</small>
+        &#9888; UNDER CONSTRUCTION &#9888;<br>
+        <small style="color:#ffff00;">More awesome content coming soon! This site is always being improved!</small>
       </div>
       <div class="visitor-counter">Visitors: 001337</div>
     </td>
   </tr>
+
 </table>
 
-<script>
-(function() {
-  fetch('/api/openclaw')
-    .then(function(r) { return r.json(); })
-    .then(function(releases) {
-      var el = document.getElementById('openclaw-content');
-      if (!releases || !releases.length) { el.innerHTML = '<p><em>No releases found.</em></p>'; return; }
-      var html = '';
-      releases.forEach(function(r) {
-        var date = r.published_at ? new Date(r.published_at).toLocaleDateString() : '';
-        html += '<div class="openclaw-entry"><span class="openclaw-version">' + r.name + '</span> ';
-        if (date) html += '<span class="openclaw-date">(' + date + ')</span>';
-        if (r.body) html += '<p style="margin:4px 0 0;">' + r.body + '</p>';
-        html += '</div>';
-      });
-      el.innerHTML = html;
-    })
-    .catch(function() {
-      document.getElementById('openclaw-content').innerHTML = '<p><em>Unable to load OpenClaw updates.</em></p>';
-    });
-})();
-</script>
+<script src="app.js"></script>
+<script src="/js/news.js"></script>
 </body>
 </html>
