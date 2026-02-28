@@ -3,6 +3,7 @@
 <head>
   <title>DurbinDash - Ryan's Personal Portal</title>
   <link rel='stylesheet' href='styles.css'>
+  <link rel='stylesheet' href='/css/news.css'>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 </head>
 <body>
@@ -13,7 +14,7 @@
 
 <table width="100%" border="2" cellpadding="6" cellspacing="2" bgcolor="#c0c0c0">
 
-  <!-- ROW 2: WEATHER | TODAY'S NEWS -->
+  <!-- ROW 1: WEATHER | AI NEWS -->
   <tr>
     <td width="30%" valign="top" bgcolor="#003366">
       <div class="section-header">&#9728; WEATHER</div>
@@ -26,32 +27,45 @@
     </td>
     <td width="70%" valign="top" bgcolor="#004040">
       <div class="section-header">
-        AI NEWS
-        <span class='new-badge'>&#9733; NEW!</span>
+        &#128200; AI NEWS
+        <span class='badge-new'>NEW!</span>
       </div>
       <div id="news-ai">
         <p style="color:#ffffff;font-family:Arial,sans-serif;font-size:13px;">
-          Loading latest news...<br>
-          Check back soon for headlines!
+          Loading latest AI news...
         </p>
       </div>
     </td>
   </tr>
 
-
-  <!-- ROW 2b: TECH NEWS (Ars Technica + The Verge) -->
+  <!-- ROW 2: TECH NEWS (Ars Technica + The Verge) -->
   <tr>
     <td colspan="2" valign="top" bgcolor="#002244">
       <div class="section-header">&#128187; TECH NEWS (ARS TECHNICA + THE VERGE)</div>
       <div id="news-tech">
         <p style="color:#ffffff;font-family:Arial,sans-serif;font-size:13px;">
-          Loading tech news...<br>
+          Loading tech news...
         </p>
       </div>
     </td>
   </tr>
 
-  <!-- ROW 3: MY STUFF app portal -->
+  <!-- ROW 3: HACKER NEWS -->
+  <tr>
+    <td colspan="2" valign="top" bgcolor="#333300">
+      <div class="section-header">
+        &#128293; HACKER NEWS
+        <span class='badge-new'>NEW!</span>
+      </div>
+      <div id="news-hn">
+        <p style="color:#ffffff;font-family:Arial,sans-serif;font-size:13px;">
+          Loading Hacker News...
+        </p>
+      </div>
+    </td>
+  </tr>
+
+  <!-- ROW 4: MY STUFF app portal -->
   <tr>
     <td colspan="2" valign="top" bgcolor="#800080" align="center">
       <div class="section-header">&#9733; MY STUFF &#9733; YOUR PERSONAL APP PORTAL &#9733;</div>
@@ -62,30 +76,6 @@
         <a href="http://10.0.1.132:3333" class="portal-btn" target="_blank">&#127807; Antfarm</a>
         <a href="http://10.0.1.132:8080" class="portal-btn" target="_blank">&#128272; Vaultwarden</a>
         <a href="http://10.0.1.132:2283" class="portal-btn" target="_blank">&#128247; Immich</a>
-      </div>
-    </td>
-  </tr>
-
-  <!-- ROW 4: REDDIT | TECH NEWS -->
-  <tr>
-    <td width="50%" valign="top" bgcolor="#006633">
-      <div class="section-header">&#128293; WHAT'S HOT ON REDDIT</div>
-      <div id="reddit-content">
-        <p style="color:#ffffff;font-family:Arial,sans-serif;font-size:13px;">
-          Loading hot posts...<br>
-          Reddit content coming soon!
-        </p>
-      </div>
-    </td>
-    <td width="50%" valign="top" bgcolor="#333300">
-      <div class="section-header">
-        HACKER NEWS
-        <span class='new-badge'>&#9733; NEW!</span>
-      </div>
-      <div id="news-hn">
-        <p style="color:#ffffff;font-family:Arial,sans-serif;font-size:13px;">
-          Loading Hacker News...<br>
-        </p>
       </div>
     </td>
   </tr>
@@ -104,6 +94,6 @@
 </table>
 
 <script src="app.js"></script>
-<script src="js/news.js"></script>
+<script src="/js/news.js"></script>
 </body>
 </html>
