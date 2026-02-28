@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DurbinDash</title>
+  <style>
+    body { background: #000; color: #33ff33; font-family: 'Courier New', Courier, monospace; margin: 0; padding: 16px; }
+    h1 { color: #ffcc00; font-size: 1.4em; letter-spacing: 2px; }
+    #reddit-feed { margin-top: 20px; }
+    .reddit-sub-header { color: #ffcc00; font-weight: bold; margin: 14px 0 6px; font-size: 1.1em; }
+    .reddit-post { margin: 4px 0; font-size: 0.95em; }
+    .reddit-num { color: #999; }
+    .reddit-score { color: #ff6600; margin-right: 4px; }
+    .reddit-title { color: #33ff33; text-decoration: none; }
+    .reddit-title:hover { color: #ffff00; text-decoration: underline; }
+    .reddit-comments { color: #6699ff; text-decoration: none; margin-left: 6px; font-size: 0.85em; }
+    .reddit-divider { color: #336633; margin: 10px 0; }
+    .reddit-loading, .reddit-error { color: #cc3333; }
+  </style>
+</head>
+<body>
+  <h1>[ DurbinDash BBS v1.0 ]</h1>
+  <div id="reddit-feed"></div>
+  <script src="/js/reddit.js"></script>
+</body>
+</html>
