@@ -113,8 +113,8 @@ body {
 
 /* .under-construction removed (fake banner) */
 
-a { color: #00FFFF; text-decoration: underline; }
-a:visited { color: #FF00FF; }
+a { color: #90CAF9; text-decoration: underline; }
+a:visited { color: #CE93D8; }
 a:hover { color: #FFD700; }
 
 /* US-002: Site banner with shimmer animation */
@@ -147,4 +147,40 @@ a:hover { color: #FFD700; }
         -webkit-text-fill-color: #ffff00;
         color: #ffff00;
     }
+}
+
+/* US-001: Loading spinner */
+@keyframes spin {
+    0%   { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255,255,255,0.3);
+    border-top-color: #FFD700;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+
+/* US-001: Error state box */
+.error-state {
+    background: #fffde7;
+    border: 1px solid #f9a825;
+    color: #333;
+    padding: 10px;
+    border-radius: 4px;
+    margin: 4px 0;
+}
+
+/* US-001: Last-updated timestamp */
+.last-updated {
+    font-size: 11px;
+    color: #aaa;
+    margin-top: 6px;
+    display: block;
 }
