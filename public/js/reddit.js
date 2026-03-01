@@ -3,6 +3,13 @@
 
 const DEFAULT_SUBS = ['artificial', 'LocalLLaMA'];
 
+function _formatLastUpdated(ts) {
+  var elapsed = Math.floor((Date.now() - ts) / 60000);
+  if (elapsed < 1) return 'just now';
+  if (elapsed === 1) return '1 minute ago';
+  return elapsed + ' minutes ago';
+}
+
 function formatScore(n) {
   return '[▲ ' + Number(n).toLocaleString() + ']';
 }
@@ -31,24 +38,49 @@ function renderPosts(sub, posts) {
 async function loadRedditFeed() {
   var container = document.getElementById('reddit-feed');
   if (!container) return;
-  container.innerHTML = '<div class="reddit-loading">[ FETCHING BBS POSTS... ]</div>';
+  container.innerHTML = '<div class="spinner"></div>';
 
   var results = await Promise.all(DEFAULT_SUBS.map(async function(sub) {
     try {
       var res = await fetch('/api/reddit?sub=' + encodeURIComponent(sub));
       if (!res.ok) throw new Error('HTTP ' + res.status);
       var posts = await res.json();
-      return renderPosts(sub, posts);
+      return { ok: true, html: renderPosts(sub, posts), sub: sub };
     } catch (err) {
-      return '<div class="reddit-sub-header">[ r/' + sub + ' ]</div><div class="reddit-error">!! ERROR LOADING FEED: ' + err.message + '</div>';
+      return { ok: false, sub: sub };
     }
   }));
 
-  container.innerHTML = results.join('\n<div class="reddit-divider">────────────────────────────────────</div>\n');
+  var hasError = results.some(function(r) { return !r.ok; });
+
+  var htmlParts = results.map(function(r) {
+    if (r.ok) return r.html;
+    return '<div class="reddit-sub-header">[ r/' + r.sub + ' ]</div>' +
+      '<div class="error-state">' +
+      "Couldn't load r/" + r.sub + ' posts \u2014 check your connection \u{1F615}<br>' +
+      '<button class="retry-btn">\u{1F504} Try again</button>' +
+      '</div>';
+  });
+
+  container.innerHTML = htmlParts.join('\n<div class="reddit-divider">\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500</div>\n');
+
+  // Attach retry listeners
+  container.querySelectorAll('.retry-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      loadRedditFeed();
+    });
+  });
+
+  if (!hasError) {
+    var lastUpdated = document.createElement('div');
+    lastUpdated.className = 'last-updated';
+    lastUpdated.textContent = 'Last updated: ' + _formatLastUpdated(Date.now());
+    container.appendChild(lastUpdated);
+  }
 }
 
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { renderPosts: renderPosts, formatScore: formatScore };
+  module.exports = { renderPosts: renderPosts, formatScore: formatScore, _formatLastUpdated: _formatLastUpdated, loadRedditFeed: loadRedditFeed };
 }
 
 if (typeof document !== 'undefined') {
