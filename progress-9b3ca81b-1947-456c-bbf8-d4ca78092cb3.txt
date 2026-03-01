@@ -18,3 +18,31 @@ Started: 2026-03-01
 - Created tests/nielsen-p1.test.js with 4 tests
 - **Learnings:** sed works fine for these file edits; jest tests run quickly (~0.8s)
 ---
+
+## 2026-03-01 - US-002: Replace marquee banner with CSS @keyframes shimmer header
+- Replaced `<marquee>` element with `<header id="site-banner"><span class="banner-text">...</span></header>`
+- Added `@keyframes shimmer` CSS animation (gradient background-position trick for text shimmer)
+- Applied Comic Sans MS font to `.banner-text` inside `#site-banner`
+- Added `@media (prefers-reduced-motion: reduce)` override disabling animation on `#site-banner *`
+- Added 6 new tests to tests/nielsen-p1.test.js for US-002 acceptance criteria
+- **Learnings:** CSS text shimmer uses background-clip:text + animated background-position; -webkit-text-fill-color needed to override color in reduced-motion fallback
+---
+
+## 2026-03-01 - US-003: Replace table-based layout with CSS Grid
+- Replaced `<table>/<tr>/<td>` structure in public/index.html with `<main id="grid-layout">` containing `<div class="grid-cell">` children
+- Removed legacy `table { width: 100% }` and `td { vertical-align: top }` CSS rules from public/styles.css
+- Added CSS Grid rules: `#grid-layout { display: grid; grid-template-columns: 30% 70%; gap: 4px; }`
+- Added `.grid-full { grid-column: 1 / -1; }` for full-width rows
+- Added `@media (max-width: 600px)` query switching to `grid-template-columns: 1fr`
+- All 90s color palette preserved via `style="background-color:..."` on grid cells
+- Added 9 new tests to tests/nielsen-p1.test.js for US-003 acceptance criteria
+- **Learnings:** Python string replace is more reliable than sed/edit tools for multi-line HTML changes; grid-column: 1 / -1 works cleanly for spanning both columns
+---
+
+## 2026-03-01 - US-004: Final verification, test suite review, and push to origin main
+- Ran npm test — 97 tests, 15 suites, all passed (zero failures)
+- Verified tests/nielsen-p1.test.js covers all 4 Nielsen P1 changes: viewport meta, body font (no Comic Sans), no marquee tag, shimmer @keyframes, prefers-reduced-motion, grid layout, section IDs
+- Confirmed git log shows all 3 prior Nielsen P1 commits on main branch
+- git push origin main — already up to date (all commits pushed by prior stories)
+- No implementation changes needed (all tests passed first run)
+---
