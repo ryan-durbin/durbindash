@@ -61,6 +61,12 @@ async function fetchAndRenderNews(category, containerId) {
 
   container.innerHTML = '';
   container.appendChild(ul);
+
+  // Update last-refresh timestamp
+  const lastRefresh = document.getElementById('last-refresh');
+  if (lastRefresh) {
+    lastRefresh.textContent = new Date().toLocaleTimeString();
+  }
 }
 
 if (typeof document !== 'undefined') {

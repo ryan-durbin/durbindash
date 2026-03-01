@@ -61,7 +61,7 @@ body {
 .portal-btn:hover { background-color: #00AAAA; border-style: inset; color: #FFD700; }
 .portal-btn:focus-visible { outline: 3px solid #FFD700; outline-offset: 2px; }
 
-.visitor-counter {
+/* .visitor-counter removed (fake counter) {
     border: 3px solid #FFD700;
     color: #FFD700;
     font-family: 'Courier New', monospace;
@@ -71,7 +71,7 @@ body {
     padding: 6px;
     background-color: #000033;
     display: inline-block;
-}
+} */
 
 /* --- Blinking animation (90s style!) --- */
 @keyframes blink {
@@ -111,14 +111,7 @@ body {
     vertical-align: middle;
 }
 
-.under-construction {
-    padding: 10px;
-    text-align: center;
-    background-color: #1a1a00;
-    color: #FFD700;
-    font-weight: bold;
-    border: 4px solid #FFD700;
-}
+/* .under-construction removed (fake banner) */
 
 a { color: #00FFFF; text-decoration: underline; }
 a:visited { color: #FF00FF; }
