@@ -5,7 +5,7 @@
 body {
     background-color: #000080;
     color: #FFFFFF;
-    font-family: 'Comic Sans MS', 'Comic Sans', Arial, sans-serif;
+    font-family: system-ui, -apple-system, sans-serif;
     margin: 0;
     padding: 4px;
     font-size: 13px;
