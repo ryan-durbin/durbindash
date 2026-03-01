@@ -1,0 +1,20 @@
+# Progress Log
+Run: 9b3ca81b-1947-456c-bbf8-d4ca78092cb3
+Task: DurbinDash: Nielsen Heuristics P1 fixes
+Started: 2026-03-01
+
+## Codebase Patterns
+- Static files served from public/ (no build step)
+- Tests use Jest, run with `npm test`
+- Test files live in tests/ directory
+- index.html and styles.css are in public/
+- JS files: app.js and /js/news.js referenced in index.html
+
+---
+
+## 2026-03-01 - US-001: Add viewport meta tag and replace body font
+- Added `<meta name="viewport" content="width=device-width, initial-scale=1">` to public/index.html after charset meta
+- Changed body font-family in public/styles.css from 'Comic Sans MS' to system-ui, -apple-system, sans-serif
+- Created tests/nielsen-p1.test.js with 4 tests
+- **Learnings:** sed works fine for these file edits; jest tests run quickly (~0.8s)
+---

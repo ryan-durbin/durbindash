@@ -102,3 +102,35 @@ td { vertical-align: top; padding: 6px; }
 a { color: #00FFFF; text-decoration: underline; }
 a:visited { color: #FF00FF; }
 a:hover { color: #FFD700; }
+
+/* US-002: Site banner with shimmer animation */
+#site-banner {
+    background-color: #000080;
+    padding: 10px 12px;
+    text-align: center;
+}
+
+#site-banner .banner-text {
+    font-family: 'Comic Sans MS', cursive;
+    font-weight: bold;
+    font-size: 16px;
+    background: linear-gradient(90deg, #ffff00 0%, #ffffff 40%, #ffff00 60%, #ffff00 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 3s linear infinite;
+}
+
+@keyframes shimmer {
+    0% { background-position: 200% center; }
+    100% { background-position: -200% center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #site-banner * {
+        animation: none;
+        -webkit-text-fill-color: #ffff00;
+        color: #ffff00;
+    }
+}

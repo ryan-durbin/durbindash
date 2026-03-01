@@ -1,0 +1,10 @@
+
+## 2026-02-28 - US-002: Display 3-day forecast in the weather widget with matching styles
+- Updated public/js/weather.js: added getWeatherIcon() function, forecast rendering after current conditions
+- Forecast section uses .wx-forecast / .wx-fc-label / .wx-fc-days / .wx-fc-day CSS classes
+- Gracefully skips forecast section if w.forecast is missing or empty
+- Added CSS to public/styles.css: .wx-forecast, .wx-fc-label (#FFD700 on #000066), .wx-fc-days (display:flex), .wx-fc-day (teal border)
+- Created tests/weather.frontend.test.js: 21 unit tests for getWeatherIcon() covering all condition types
+- Files changed: public/js/weather.js, public/styles.css, tests/weather.frontend.test.js
+- **Learnings:** Frontend JS exports via `if (typeof module !== 'undefined' && module.exports)` pattern allows testing without jsdom; tests grew from 70 to 90 total (13 test suites)
+---

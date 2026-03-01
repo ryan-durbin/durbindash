@@ -36,3 +36,30 @@ describe('US-001: Viewport meta tag and body font', () => {
     }
   });
 });
+
+describe('US-002: Replace marquee banner with CSS shimmer header', () => {
+  test('index.html does NOT contain <marquee', () => {
+    expect(indexHtml).not.toContain('<marquee');
+  });
+
+  test('index.html contains <header with id="site-banner"', () => {
+    expect(indexHtml).toMatch(/id=['"]site-banner['"]/);
+  });
+
+  test('index.html contains banner text', () => {
+    expect(indexHtml).toContain('WELCOME TO DURBINDASH :: YOUR PERSONAL WEB PORTAL :: EST. 2026');
+  });
+
+  test('styles.css contains @keyframes shimmer', () => {
+    expect(stylesCss).toContain('@keyframes shimmer');
+  });
+
+  test('styles.css contains prefers-reduced-motion override for banner', () => {
+    expect(stylesCss).toContain('prefers-reduced-motion');
+    expect(stylesCss).toContain('#site-banner');
+  });
+
+  test('styles.css banner rule includes Comic Sans font', () => {
+    expect(stylesCss).toContain('Comic Sans');
+  });
+});
