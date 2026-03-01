@@ -4,24 +4,20 @@
  * Tests for public/js/news.js frontend module using jsdom environment.
  */
 
-const path = require('path');
-
 // Mock fetch before requiring the module
 global.fetch = jest.fn();
 
-// We need to require the module fresh each test (module caches)
-let fetchAndRenderNews;
+let fetchAndRenderNews, _formatLastUpdated;
 
 beforeEach(() => {
   jest.resetModules();
   global.fetch = jest.fn();
-  // Set up DOM containers
   document.body.innerHTML = `
     <div id="news-ai"></div>
     <div id="news-tech"></div>
     <div id="news-hn"></div>
   `;
-  ({ fetchAndRenderNews } = require('../public/js/news.js'));
+  ({ fetchAndRenderNews, _formatLastUpdated } = require('../public/js/news.js'));
 });
 
 function makeItem(overrides = {}) {
@@ -39,16 +35,29 @@ function oldDate() {
 }
 
 function recentDate() {
-  return new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(); // 1 hour ago
+  return new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString();
 }
 
 describe('fetchAndRenderNews', () => {
+  test('sets container innerHTML to .spinner before fetching', async () => {
+    let resolveJson;
+    global.fetch.mockReturnValueOnce(new Promise(res => {
+      resolveJson = res;
+    }));
+
+    const promise = fetchAndRenderNews('ai', 'news-ai');
+    // While still pending, spinner should be present
+    const container = document.getElementById('news-ai');
+    expect(container.querySelector('.spinner')).not.toBeNull();
+
+    // Resolve fetch to clean up
+    resolveJson({ ok: true, json: async () => [makeItem()] });
+    await promise;
+  });
+
   test('renders a <ul> with <li> elements for each item', async () => {
     const items = [makeItem(), makeItem({ title: 'Article 2', url: 'https://example.com/2' })];
-    global.fetch.mockResolvedValueOnce({
-      ok: true,
-      json: async () => items,
-    });
+    global.fetch.mockResolvedValueOnce({ ok: true, json: async () => items });
 
     await fetchAndRenderNews('ai', 'news-ai');
 
@@ -90,23 +99,69 @@ describe('fetchAndRenderNews', () => {
     expect(badge).toBeNull();
   });
 
-  test('fetch error renders error text inside container', async () => {
+  test('fetch error renders .error-state with friendly message (not raw HTTP error)', async () => {
     global.fetch.mockRejectedValueOnce(new Error('Network failure'));
 
     await fetchAndRenderNews('ai', 'news-ai');
 
     const container = document.getElementById('news-ai');
-    expect(container.textContent).toMatch(/Failed to load news/);
-    expect(container.textContent).toMatch(/Network failure/);
+    const errorState = container.querySelector('.error-state');
+    expect(errorState).not.toBeNull();
+    expect(errorState.textContent).toMatch(/Couldn't load/);
+    expect(errorState.textContent).not.toMatch(/Failed to load news/);
+    expect(errorState.textContent).not.toMatch(/Network failure/);
   });
 
-  test('non-ok HTTP status renders error text', async () => {
+  test('non-ok HTTP status renders .error-state with friendly message', async () => {
     global.fetch.mockResolvedValueOnce({ ok: false, status: 500 });
 
     await fetchAndRenderNews('tech', 'news-tech');
 
     const container = document.getElementById('news-tech');
-    expect(container.textContent).toMatch(/Failed to load news/);
+    const errorState = container.querySelector('.error-state');
+    expect(errorState).not.toBeNull();
+    expect(errorState.textContent).toMatch(/Couldn't load/);
+  });
+
+  test('fetch error shows a retry button that re-triggers fetch', async () => {
+    global.fetch.mockRejectedValueOnce(new Error('Network failure'));
+
+    await fetchAndRenderNews('ai', 'news-ai');
+
+    const container = document.getElementById('news-ai');
+    const retryBtn = container.querySelector('.retry-btn');
+    expect(retryBtn).not.toBeNull();
+    expect(retryBtn.textContent).toContain('🔄 Try again');
+
+    // Click retry — should call fetch again
+    global.fetch.mockResolvedValueOnce({ ok: true, json: async () => [makeItem()] });
+    retryBtn.click();
+    // Give it a tick
+    await new Promise(r => setTimeout(r, 50));
+    expect(global.fetch).toHaveBeenCalledTimes(2);
+  });
+
+  test('on success, .last-updated element is appended', async () => {
+    const items = [makeItem()];
+    global.fetch.mockResolvedValueOnce({ ok: true, json: async () => items });
+
+    await fetchAndRenderNews('ai', 'news-ai');
+
+    const container = document.getElementById('news-ai');
+    const lastUpdated = container.querySelector('.last-updated');
+    expect(lastUpdated).not.toBeNull();
+    expect(lastUpdated.textContent).toMatch(/Last updated:/);
+  });
+
+  test('last-updated shows "just now" immediately after fetch', async () => {
+    const items = [makeItem()];
+    global.fetch.mockResolvedValueOnce({ ok: true, json: async () => items });
+
+    await fetchAndRenderNews('ai', 'news-ai');
+
+    const container = document.getElementById('news-ai');
+    const lastUpdated = container.querySelector('.last-updated');
+    expect(lastUpdated.textContent).toContain('just now');
   });
 
   test('does nothing if container id does not exist', async () => {
@@ -123,5 +178,19 @@ describe('fetchAndRenderNews', () => {
     const li = document.getElementById('news-ai').querySelector('li');
     expect(li.textContent).toContain('[TechCrunch]');
     expect(li.querySelector('a').textContent).toBe('AI Breakthrough');
+  });
+});
+
+describe('_formatLastUpdated', () => {
+  test('returns "just now" for timestamps within 1 minute', () => {
+    expect(_formatLastUpdated(Date.now() - 30000)).toBe('just now');
+  });
+
+  test('returns "1 minute ago" for 1 minute elapsed', () => {
+    expect(_formatLastUpdated(Date.now() - 65000)).toBe('1 minute ago');
+  });
+
+  test('returns "X minutes ago" for multiple minutes', () => {
+    expect(_formatLastUpdated(Date.now() - 5 * 60000)).toBe('5 minutes ago');
   });
 });

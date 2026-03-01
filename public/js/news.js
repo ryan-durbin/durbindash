@@ -5,6 +5,21 @@
 
 const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 
+// Track last fetch timestamps per containerId
+const _lastFetchTimes = {};
+
+/**
+ * Formats elapsed time since a given timestamp.
+ * @param {number} ts - timestamp in ms
+ * @returns {string}
+ */
+function _formatLastUpdated(ts) {
+  const elapsed = Math.floor((Date.now() - ts) / 60000);
+  if (elapsed < 1) return 'just now';
+  if (elapsed === 1) return '1 minute ago';
+  return `${elapsed} minutes ago`;
+}
+
 /**
  * Fetches news from the API and renders into the given container element.
  * @param {string} category - 'ai', 'tech', or 'hn'
@@ -14,13 +29,25 @@ async function fetchAndRenderNews(category, containerId) {
   const container = document.getElementById(containerId);
   if (!container) return;
 
+  // Show spinner
+  container.innerHTML = `<div class="spinner"></div>`;
+
   let items;
   try {
     const res = await fetch(`/api/news?category=${encodeURIComponent(category)}`);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     items = await res.json();
   } catch (err) {
-    container.innerHTML = `<p class="news-error">Failed to load news: ${err.message}</p>`;
+    const categoryLabel = category === 'hn' ? 'Hacker News' : `${category} news`;
+    container.innerHTML = `
+      <div class="error-state">
+        Couldn't load ${categoryLabel} — check your connection 😕
+        <br>
+        <button class="retry-btn">🔄 Try again</button>
+      </div>`;
+    container.querySelector('.retry-btn').addEventListener('click', () => {
+      fetchAndRenderNews(category, containerId);
+    });
     return;
   }
 
@@ -62,6 +89,13 @@ async function fetchAndRenderNews(category, containerId) {
   container.innerHTML = '';
   container.appendChild(ul);
 
+  // Record fetch time and append last-updated
+  _lastFetchTimes[containerId] = Date.now();
+  const lastUpdatedDiv = document.createElement('div');
+  lastUpdatedDiv.className = 'last-updated';
+  lastUpdatedDiv.textContent = `Last updated: ${_formatLastUpdated(_lastFetchTimes[containerId])}`;
+  container.appendChild(lastUpdatedDiv);
+
   // Update last-refresh timestamp
   const lastRefresh = document.getElementById('last-refresh');
   if (lastRefresh) {
@@ -79,5 +113,5 @@ if (typeof document !== 'undefined') {
 
 // Export for testing (CommonJS-compatible guard)
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { fetchAndRenderNews };
+  module.exports = { fetchAndRenderNews, _formatLastUpdated };
 }
