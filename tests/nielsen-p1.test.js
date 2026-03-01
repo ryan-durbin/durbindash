@@ -63,3 +63,47 @@ describe('US-002: Replace marquee banner with CSS shimmer header', () => {
     expect(stylesCss).toContain('Comic Sans');
   });
 });
+
+describe('US-003: Replace table-based layout with CSS Grid', () => {
+  test('index.html contains NO <table elements', () => {
+    expect(indexHtml).not.toContain('<table');
+  });
+
+  test('index.html contains NO <tr elements', () => {
+    expect(indexHtml).not.toContain('<tr');
+  });
+
+  test('index.html contains NO <td elements', () => {
+    expect(indexHtml).not.toContain('<td');
+  });
+
+  test('index.html contains a grid container with id="grid-layout"', () => {
+    expect(indexHtml).toContain('id="grid-layout"');
+  });
+
+  test('all required section IDs are present', () => {
+    const requiredIds = ['weather-content', 'news-ai', 'news-tech', 'news-hn', 'app-portal'];
+    for (const id of requiredIds) {
+      expect(indexHtml).toContain('id="' + id + '"');
+    }
+  });
+
+  test('styles.css contains display: grid on #grid-layout', () => {
+    expect(stylesCss).toContain('#grid-layout');
+    expect(stylesCss).toContain('display: grid');
+  });
+
+  test('styles.css contains 30% and 70% column widths', () => {
+    expect(stylesCss).toContain('30%');
+    expect(stylesCss).toContain('70%');
+  });
+
+  test('styles.css contains grid-column: 1 / -1 for full-width rows', () => {
+    expect(stylesCss).toContain('grid-column: 1 / -1');
+  });
+
+  test('styles.css contains @media query for mobile single-column layout', () => {
+    expect(stylesCss).toMatch(/@media.*max-width.*600px|375px/);
+    expect(stylesCss).toContain('grid-template-columns: 1fr');
+  });
+});

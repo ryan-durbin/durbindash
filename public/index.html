@@ -13,95 +13,84 @@
   <span class="banner-text">WELCOME TO DURBINDASH :: YOUR PERSONAL WEB PORTAL :: EST. 2026</span>
 </header>
 
-<main>
-<table width="100%" border="2" cellpadding="6" cellspacing="2" bgcolor="#c0c0c0">
+<main id="grid-layout">
 
   <!-- ROW 1: WEATHER | AI NEWS -->
-  <tr>
-    <td width="30%" valign="top" bgcolor="#003366">
-      <section>
-        <h2 class="section-header">&#9728; WEATHER</h2>
-        <div id="weather-content">
-          <p style="color:#ffffff;font-family:Arial,sans-serif;font-size:13px;">
-            Loading weather data...<br>
-            <em>Anchorage, AK</em>
-          </p>
-        </div>
-      </section>
-    </td>
-    <td width="70%" valign="top" bgcolor="#004040">
-      <section>
-        <h2 class="section-header">
-          &#128200; AI NEWS
-          <span class='badge-new'>NEW!</span>
-        </h2>
-        <div id="news-ai">
-          <p style="color:#ffffff;font-family:Arial,sans-serif;font-size:13px;">
-            Loading latest AI news...
-          </p>
-        </div>
-      </section>
-    </td>
-  </tr>
+  <div class="grid-cell" style="background-color:#003366;">
+    <section>
+      <h2 class="section-header">&#9728; WEATHER</h2>
+      <div id="weather-content">
+        <p style="color:#ffffff;font-family:Arial,sans-serif;font-size:13px;">
+          Loading weather data...<br>
+          <em>Anchorage, AK</em>
+        </p>
+      </div>
+    </section>
+  </div>
+
+  <div class="grid-cell" style="background-color:#004040;">
+    <section>
+      <h2 class="section-header">
+        &#128200; AI NEWS
+        <span class='badge-new'>NEW!</span>
+      </h2>
+      <div id="news-ai">
+        <p style="color:#ffffff;font-family:Arial,sans-serif;font-size:13px;">
+          Loading latest AI news...
+        </p>
+      </div>
+    </section>
+  </div>
 
   <!-- ROW 2: TECH NEWS (Ars Technica + The Verge) -->
-  <tr>
-    <td colspan="2" valign="top" bgcolor="#002244">
-      <section>
-        <h2 class="section-header">&#128187; TECH NEWS (ARS TECHNICA + THE VERGE)</h2>
-        <div id="news-tech">
-          <p style="color:#ffffff;font-family:Arial,sans-serif;font-size:13px;">
-            Loading tech news...
-          </p>
-        </div>
-      </section>
-    </td>
-  </tr>
+  <div class="grid-cell grid-full" style="background-color:#002244;">
+    <section>
+      <h2 class="section-header">&#128187; TECH NEWS (ARS TECHNICA + THE VERGE)</h2>
+      <div id="news-tech">
+        <p style="color:#ffffff;font-family:Arial,sans-serif;font-size:13px;">
+          Loading tech news...
+        </p>
+      </div>
+    </section>
+  </div>
 
   <!-- ROW 3: HACKER NEWS -->
-  <tr>
-    <td colspan="2" valign="top" bgcolor="#333300">
-      <section>
-        <h2 class="section-header">
-          &#128293; HACKER NEWS
-          <span class='badge-new'>NEW!</span>
-        </h2>
-        <div id="news-hn">
-          <p style="color:#ffffff;font-family:Arial,sans-serif;font-size:13px;">
-            Loading Hacker News...
-          </p>
-        </div>
-      </section>
-    </td>
-  </tr>
+  <div class="grid-cell grid-full" style="background-color:#333300;">
+    <section>
+      <h2 class="section-header">
+        &#128293; HACKER NEWS
+        <span class='badge-new'>NEW!</span>
+      </h2>
+      <div id="news-hn">
+        <p style="color:#ffffff;font-family:Arial,sans-serif;font-size:13px;">
+          Loading Hacker News...
+        </p>
+      </div>
+    </section>
+  </div>
 
   <!-- ROW 4: MY STUFF app portal -->
-  <tr>
-    <td colspan="2" valign="top" bgcolor="#800080" align="center">
-      <section>
-        <h2 class="section-header">&#9733; MY STUFF &#9733; YOUR PERSONAL APP PORTAL &#9733;</h2>
-        <div id="app-portal" style="padding:10px;">
-          <a href="http://10.0.1.132:8123" class="portal-btn" target="_blank" aria-label="Open Home Assistant">&#127968; Home Assistant</a>
-          <a href="http://10.0.1.132:7747" class="portal-btn" target="_blank" aria-label="Open ClawStats">&#128202; ClawStats</a>
-          <a href="http://10.0.1.132:5678" class="portal-btn" target="_blank" aria-label="Open n8n">&#9881; n8n</a>
-          <a href="http://10.0.1.132:3333" class="portal-btn" target="_blank" aria-label="Open Antfarm">&#127807; Antfarm</a>
-          <a href="http://10.0.1.132:8080" class="portal-btn" target="_blank" aria-label="Open Vaultwarden">&#128272; Vaultwarden</a>
-          <a href="http://10.0.1.132:2283" class="portal-btn" target="_blank" aria-label="Open Immich">&#128247; Immich</a>
-        </div>
-      </section>
-    </td>
-  </tr>
+  <div class="grid-cell grid-full" style="background-color:#800080;text-align:center;">
+    <section>
+      <h2 class="section-header">&#9733; MY STUFF &#9733; YOUR PERSONAL APP PORTAL &#9733;</h2>
+      <div id="app-portal" style="padding:10px;">
+        <a href="http://10.0.1.132:8123" class="portal-btn" target="_blank" aria-label="Open Home Assistant">&#127968; Home Assistant</a>
+        <a href="http://10.0.1.132:7747" class="portal-btn" target="_blank" aria-label="Open ClawStats">&#128202; ClawStats</a>
+        <a href="http://10.0.1.132:5678" class="portal-btn" target="_blank" aria-label="Open n8n">&#9881; n8n</a>
+        <a href="http://10.0.1.132:3333" class="portal-btn" target="_blank" aria-label="Open Antfarm">&#127807; Antfarm</a>
+        <a href="http://10.0.1.132:8080" class="portal-btn" target="_blank" aria-label="Open Vaultwarden">&#128272; Vaultwarden</a>
+        <a href="http://10.0.1.132:2283" class="portal-btn" target="_blank" aria-label="Open Immich">&#128247; Immich</a>
+      </div>
+    </section>
+  </div>
 
   <!-- ROW 5: News refresh status -->
-  <tr>
-    <td colspan="2" align="center" bgcolor="#1a1a2e">
-      <div class="refresh-status" style="color:#aaaaaa;font-family:Arial,sans-serif;font-size:11px;padding:4px;">
-        News last refreshed: <span id="last-refresh">--</span>
-      </div>
-    </td>
-  </tr>
+  <div class="grid-cell grid-full" style="background-color:#1a1a2e;text-align:center;">
+    <div class="refresh-status" style="color:#aaaaaa;font-family:Arial,sans-serif;font-size:11px;padding:4px;">
+      News last refreshed: <span id="last-refresh">--</span>
+    </div>
+  </div>
 
-</table>
 </main>
 
 <script src="app.js"></script>
