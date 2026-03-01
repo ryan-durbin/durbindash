@@ -1,17 +1,22 @@
-(function() {
+function loadWeather() {
   const widget = document.getElementById('weather-widget');
   if (!widget) return;
+  widget.innerHTML = '<div class="spinner"></div>';
   fetch('/api/weather')
     .then(r => r.json())
     .then(data => {
       widget.innerHTML = '<div class="widget-title">🌤 Current Weather</div>' +
         '<div class="weather-temp">' + (data.temp || '--') + '°F</div>' +
         '<div class="weather-desc">' + (data.description || '') + '</div>' +
-        '<div style="font-size:0.8em;color:#888;margin-top:4px;">' + (data.location || '') + '</div>';
+        '<div style="font-size:0.8em;color:#888;margin-top:4px;">' + (data.location || '') + '</div>' +
+        '<div class="last-updated">Last updated: just now</div>';
     })
     .catch(() => {
-      const body = widget.querySelector('.loading') || widget;
-      if (body.classList.contains('loading')) body.className = 'error';
-      body.textContent = 'Weather unavailable';
+      widget.innerHTML = '<div class="error-state">Couldn\'t load weather — check your connection 😕 ' +
+        '<button class="retry-btn">🔄 Try again</button></div>';
+      const btn = widget.querySelector('.retry-btn');
+      if (btn) btn.addEventListener('click', loadWeather);
     });
-})();
+}
+
+loadWeather();
