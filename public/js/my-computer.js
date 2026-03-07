@@ -14,27 +14,40 @@
     return document.getElementById('my-computer-window');
   }
 
-  function addTaskbarButton() {
-    if (document.getElementById('taskbar-mycomputer')) return;
-    var btn = document.createElement('button');
-    btn.id = 'taskbar-mycomputer';
-    btn.className = 'button';
-    btn.textContent = '🖥️ My Computer';
-    btn.style.cssText = 'margin-left:4px; height:22px; font-size:11px; padding:0 6px; cursor:pointer;';
-    btn.addEventListener('click', function () {
-      if (myComputerMinimized) {
-        restoreMyComputer();
-      } else if (myComputerOpen) {
-        minimizeMyComputer();
+  function updateTaskbar() {
+    var taskbarWindows = document.getElementById('taskbar-windows');
+    if (!taskbarWindows) return;
+    if (myComputerOpen) {
+      // Ensure button exists
+      if (!document.getElementById('taskbar-btn-mycomp')) {
+        var btn = document.createElement('button');
+        btn.id = 'taskbar-btn-mycomp';
+        btn.className = 'button';
+        btn.textContent = '🖥️ My Computer';
+        btn.style.cssText = 'margin-left:4px; height:22px; font-size:11px; max-width:150px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; padding:0 6px; cursor:pointer;';
+        btn.addEventListener('click', function () {
+          if (myComputerMinimized) {
+            restoreMyComputer();
+          } else {
+            minimizeMyComputer();
+          }
+        });
+        taskbarWindows.appendChild(btn);
       }
-    });
-    var taskbarLeft = document.getElementById('taskbar-left');
-    if (taskbarLeft) taskbarLeft.appendChild(btn);
+    } else {
+      // Remove button if it exists
+      var existing = document.getElementById('taskbar-btn-mycomp');
+      if (existing && existing.parentNode) existing.parentNode.removeChild(existing);
+    }
+  }
+
+  function addTaskbarButton() {
+    updateTaskbar();
   }
 
   function removeTaskbarButton() {
-    var btn = document.getElementById('taskbar-mycomputer');
-    if (btn && btn.parentNode) btn.parentNode.removeChild(btn);
+    var existing = document.getElementById('taskbar-btn-mycomp');
+    if (existing && existing.parentNode) existing.parentNode.removeChild(existing);
   }
 
   // --- Core window actions ---
@@ -46,7 +59,7 @@
       win.style.display = 'block';
       win.style.zIndex = '500';
     }
-    addTaskbarButton();
+    updateTaskbar();
     loadSystemStats();
     if (!statsRefreshInterval) {
       statsRefreshInterval = setInterval(loadSystemStats, 30000);
@@ -62,13 +75,14 @@
       clearInterval(statsRefreshInterval);
       statsRefreshInterval = null;
     }
-    removeTaskbarButton();
+    updateTaskbar();
   }
 
   function minimizeMyComputer() {
     myComputerMinimized = true;
     var win = getWindow();
     if (win) win.style.display = 'none';
+    updateTaskbar();
   }
 
   function restoreMyComputer() {
@@ -78,6 +92,7 @@
       win.style.display = 'block';
       win.style.zIndex = '500';
     }
+    updateTaskbar();
   }
 
   // --- Stats loading ---
@@ -190,6 +205,7 @@
       closeMyComputer: closeMyComputer,
       minimizeMyComputer: minimizeMyComputer,
       restoreMyComputer: restoreMyComputer,
+      updateTaskbar: updateTaskbar,
       addTaskbarButton: addTaskbarButton,
       removeTaskbarButton: removeTaskbarButton,
       loadSystemStats: loadSystemStats,

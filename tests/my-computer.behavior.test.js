@@ -41,6 +41,7 @@ function buildDOM() {
     <div id="taskbar">
       <div id="taskbar-left">
         <button id="start-button">Start</button>
+        <div id="taskbar-windows"></div>
       </div>
     </div>
   `;
@@ -87,15 +88,15 @@ describe('openMyComputer()', () => {
     expect(state.myComputerMinimized).toBe(false);
   });
 
-  test('adds taskbar button #taskbar-mycomputer', () => {
+  test('adds taskbar button #taskbar-btn-mycomp', () => {
     mc.openMyComputer();
-    expect(document.getElementById('taskbar-mycomputer')).not.toBeNull();
+    expect(document.getElementById('taskbar-btn-mycomp')).not.toBeNull();
   });
 
   test('only adds one taskbar button when called twice', () => {
     mc.openMyComputer();
     mc.openMyComputer();
-    const buttons = document.querySelectorAll('#taskbar-mycomputer');
+    const buttons = document.querySelectorAll('#taskbar-btn-mycomp');
     expect(buttons.length).toBe(1);
   });
 
@@ -135,7 +136,7 @@ describe('closeMyComputer()', () => {
   test('removes taskbar button', () => {
     mc.openMyComputer();
     mc.closeMyComputer();
-    expect(document.getElementById('taskbar-mycomputer')).toBeNull();
+    expect(document.getElementById('taskbar-btn-mycomp')).toBeNull();
   });
 });
 
@@ -158,7 +159,7 @@ describe('minimizeMyComputer()', () => {
     mc.openMyComputer();
     mc.minimizeMyComputer();
     // Taskbar button stays when minimized (click it to restore)
-    expect(document.getElementById('taskbar-mycomputer')).not.toBeNull();
+    expect(document.getElementById('taskbar-btn-mycomp')).not.toBeNull();
   });
 });
 
@@ -301,7 +302,7 @@ describe('setupDrag()', () => {
 describe('taskbar button', () => {
   test('clicking taskbar button while open minimizes the window', () => {
     mc.openMyComputer();
-    const btn = document.getElementById('taskbar-mycomputer');
+    const btn = document.getElementById('taskbar-btn-mycomp');
     btn.dispatchEvent(new MouseEvent('click', { bubbles: true }));
     expect(mc.getState().myComputerMinimized).toBe(true);
     expect(document.getElementById('my-computer-window').style.display).toBe('none');
@@ -310,7 +311,7 @@ describe('taskbar button', () => {
   test('clicking taskbar button while minimized restores the window', () => {
     mc.openMyComputer();
     mc.minimizeMyComputer();
-    const btn = document.getElementById('taskbar-mycomputer');
+    const btn = document.getElementById('taskbar-btn-mycomp');
     btn.dispatchEvent(new MouseEvent('click', { bubbles: true }));
     expect(mc.getState().myComputerMinimized).toBe(false);
     expect(document.getElementById('my-computer-window').style.display).toBe('block');
