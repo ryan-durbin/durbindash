@@ -402,6 +402,7 @@
     </div>
   </div>
 
+  <script src="/js/my-computer.js"></script>
   <script>
     // Detect mobile (used for disabling drag on touch devices)
     function isMobile() {
@@ -576,12 +577,17 @@
         myComputer.style.left = mcPos.left + 'px';
         myComputer.style.top = mcPos.top + 'px';
         myComputer.addEventListener('dblclick', function() {
-          // Will be wired to system stats window in US-004
-          console.log('My Computer: opening system stats window');
+          if (!myComputerOpen) {
+            openMyComputer();
+          } else if (myComputerMinimized) {
+            restoreMyComputer();
+          } else {
+            minimizeMyComputer();
+          }
         });
         myComputer.addEventListener('click', function() {
           if (isMobile()) {
-            console.log('My Computer: opening system stats window');
+            openMyComputer();
           } else {
             document.querySelectorAll('.desktop-icon').forEach(el => el.classList.remove('selected'));
             myComputer.classList.add('selected');
