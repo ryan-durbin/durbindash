@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DurbinDash — Manage Shortcuts</title>
+  <link rel="stylesheet" href="https://unpkg.com/98.css">
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 16px;
+      background-color: #008080;
+      font-family: 'Pixelated MS Sans Serif', Arial, sans-serif;
+      font-size: 12px;
+      min-height: 100vh;
+    }
+
+    .admin-container {
+      max-width: 780px;
+      margin: 0 auto;
+    }
+
+    .window {
+      width: 100%;
+    }
+
+    .window-body {
+      padding: 12px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 16px;
+    }
+
+    th {
+      text-align: left;
+      padding: 4px 8px;
+      background-color: #000080;
+      color: #ffffff;
+      border: 1px solid #808080;
+    }
+
+    td {
+      padding: 4px 8px;
+      border: 1px solid #c0c0c0;
+      vertical-align: middle;
+    }
+
+    tr:nth-child(even) td {
+      background-color: #f0f0f0;
+    }
+
+    tr:hover td {
+      background-color: #dde8ff;
+    }
+
+    .icon-cell {
+      font-size: 20px;
+      text-align: center;
+      width: 40px;
+    }
+
+    .url-cell {
+      max-width: 200px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .actions-cell {
+      white-space: nowrap;
+      width: 130px;
+    }
+
+    .actions-cell button {
+      margin-right: 4px;
+      font-size: 11px;
+      padding: 2px 8px;
+    }
+
+    #status-message {
+      padding: 4px 8px;
+      margin-bottom: 12px;
+      display: none;
+      font-weight: bold;
+    }
+
+    #status-message.success {
+      background-color: #c8ffc8;
+      border: 1px solid #008000;
+      color: #006400;
+      display: block;
+    }
+
+    #status-message.error {
+      background-color: #ffc8c8;
+      border: 1px solid #800000;
+      color: #800000;
+      display: block;
+    }
+
+    .field-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .field-row label {
+      width: 60px;
+      font-size: 12px;
+    }
+
+    .field-row input {
+      flex: 1;
+      max-width: 300px;
+    }
+
+    #form-mode-indicator {
+      font-weight: bold;
+      color: #000080;
+      margin-bottom: 8px;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-top: 8px;
+    }
+
+    .empty-row td {
+      text-align: center;
+      color: #808080;
+      font-style: italic;
+      padding: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-container">
+    <div class="window">
+      <div class="title-bar">
+        <div class="title-bar-text">Shortcut Manager</div>
+        <div class="title-bar-controls">
+          <button aria-label="Close" onclick="window.location.href='/'"></button>
+        </div>
+      </div>
+      <div class="window-body">
+
+        <div id="status-message"></div>
+
+        <div class="window" style="margin-bottom:16px;">
+          <div class="title-bar">
+            <div class="title-bar-text">Shortcuts</div>
+          </div>
+          <div class="window-body" style="padding:8px;">
+            <table id="shortcuts-table">
+              <thead>
+                <tr>
+                  <th>Icon</th>
+                  <th>Name</th>
+                  <th>URL</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="shortcuts-tbody">
+                <tr class="empty-row"><td colspan="4">Loading shortcuts...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="window">
+          <div class="title-bar">
+            <div class="title-bar-text" id="form-title">Add Shortcut</div>
+          </div>
+          <div class="window-body" style="padding:12px;">
+            <div id="form-mode-indicator">Mode: Add New Shortcut</div>
+
+            <form id="shortcut-form" onsubmit="handleFormSubmit(event)">
+              <input type="hidden" id="edit-id" value="">
+
+              <div class="field-row">
+                <label for="input-name">Name:</label>
+                <input type="text" id="input-name" name="name" placeholder="Service name" required maxlength="64">
+              </div>
+
+              <div class="field-row">
+                <label for="input-url">URL:</label>
+                <input type="text" id="input-url" name="url" placeholder="http://10.0.1.132:8123" required maxlength="512">
+              </div>
+
+              <div class="field-row">
+                <label for="input-icon">Icon:</label>
+                <input type="text" id="input-icon" name="icon" placeholder="🔗 or https://example.com/icon.png" value="🔗" maxlength="500">
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" id="submit-btn">Add Shortcut</button>
+                <button type="button" id="cancel-btn" onclick="cancelEdit()" style="display:none;">Cancel</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    'use strict';
+
+    let editingId = null;
+
+    function showStatus(message, type) {
+      const el = document.getElementById('status-message');
+      el.textContent = message;
+      el.className = type;
+      setTimeout(function() {
+        el.className = '';
+        el.textContent = '';
+        el.style.display = 'none';
+      }, 4000);
+    }
+
+    function renderTable(shortcuts) {
+      const tbody = document.getElementById('shortcuts-tbody');
+      tbody.innerHTML = '';
+
+      if (!shortcuts || shortcuts.length === 0) {
+        const tr = document.createElement('tr');
+        tr.className = 'empty-row';
+        tr.innerHTML = '<td colspan="4">No shortcuts yet. Add one below!</td>';
+        tbody.appendChild(tr);
+        return;
+      }
+
+      shortcuts.forEach(function(sc) {
+        const tr = document.createElement('tr');
+        tr.setAttribute('data-id', sc.id);
+
+        const iconTd = document.createElement('td');
+        iconTd.className = 'icon-cell';
+        function isIconUrl(icon) { return /^https?:\/\/|^\//.test(icon); }
+        if (isIconUrl(sc.icon)) {
+          const img = document.createElement('img');
+          img.src = sc.icon;
+          img.alt = sc.name || '';
+          img.style.cssText = 'width:32px;height:32px;object-fit:contain;display:block;';
+          iconTd.appendChild(img);
+        } else {
+          iconTd.textContent = sc.icon || '🔗';
+        }
+
+        const nameTd = document.createElement('td');
+        nameTd.textContent = sc.name;
+
+        const urlTd = document.createElement('td');
+        urlTd.className = 'url-cell';
+        urlTd.textContent = sc.url;
+        urlTd.title = sc.url;
+
+        const actionsTd = document.createElement('td');
+        actionsTd.className = 'actions-cell';
+
+        const editBtn = document.createElement('button');
+        editBtn.textContent = '✏️ Edit';
+        editBtn.className = 'edit-btn';
+        editBtn.setAttribute('data-id', sc.id);
+        editBtn.onclick = function() { startEdit(sc); };
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = '🗑️ Delete';
+        deleteBtn.className = 'delete-btn';
+        deleteBtn.setAttribute('data-id', sc.id);
+        deleteBtn.onclick = function() { deleteShortcut(sc.id, sc.name); };
+
+        actionsTd.appendChild(editBtn);
+        actionsTd.appendChild(deleteBtn);
+
+        tr.appendChild(iconTd);
+        tr.appendChild(nameTd);
+        tr.appendChild(urlTd);
+        tr.appendChild(actionsTd);
+
+        tbody.appendChild(tr);
+      });
+    }
+
+    function loadShortcuts() {
+      fetch('/api/shortcuts')
+        .then(function(res) { return res.json(); })
+        .then(function(shortcuts) {
+          renderTable(shortcuts);
+        })
+        .catch(function(err) {
+          showStatus('Failed to load shortcuts: ' + err.message, 'error');
+        });
+    }
+
+    function handleFormSubmit(event) {
+      event.preventDefault();
+
+      const name = document.getElementById('input-name').value.trim();
+      const url = document.getElementById('input-url').value.trim();
+      const icon = document.getElementById('input-icon').value.trim() || '🔗';
+
+      if (!name || !url) {
+        showStatus('Name and URL are required.', 'error');
+        return;
+      }
+
+      const payload = { name: name, url: url, icon: icon };
+
+      if (editingId) {
+        fetch('/api/shortcuts/' + editingId, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        })
+          .then(function(res) {
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            return res.json();
+          })
+          .then(function() {
+            showStatus('Shortcut updated successfully!', 'success');
+            cancelEdit();
+            loadShortcuts();
+          })
+          .catch(function(err) {
+            showStatus('Failed to update shortcut: ' + err.message, 'error');
+          });
+      } else {
+        fetch('/api/shortcuts', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        })
+          .then(function(res) {
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            return res.json();
+          })
+          .then(function() {
+            showStatus('Shortcut added successfully!', 'success');
+            document.getElementById('shortcut-form').reset();
+            document.getElementById('input-icon').value = '🔗';
+            loadShortcuts();
+          })
+          .catch(function(err) {
+            showStatus('Failed to add shortcut: ' + err.message, 'error');
+          });
+      }
+    }
+
+    function startEdit(sc) {
+      editingId = sc.id;
+      document.getElementById('edit-id').value = sc.id;
+      document.getElementById('input-name').value = sc.name;
+      document.getElementById('input-url').value = sc.url;
+      document.getElementById('input-icon').value = sc.icon || '🔗';
+      document.getElementById('submit-btn').textContent = 'Save Changes';
+      document.getElementById('cancel-btn').style.display = 'inline-block';
+      document.getElementById('form-title').textContent = 'Edit Shortcut';
+      document.getElementById('form-mode-indicator').textContent = 'Mode: Editing — ' + sc.name;
+      document.getElementById('input-name').focus();
+    }
+
+    function cancelEdit() {
+      editingId = null;
+      document.getElementById('edit-id').value = '';
+      document.getElementById('shortcut-form').reset();
+      document.getElementById('input-icon').value = '🔗';
+      document.getElementById('submit-btn').textContent = 'Add Shortcut';
+      document.getElementById('cancel-btn').style.display = 'none';
+      document.getElementById('form-title').textContent = 'Add Shortcut';
+      document.getElementById('form-mode-indicator').textContent = 'Mode: Add New Shortcut';
+    }
+
+    function deleteShortcut(id, name) {
+      if (!window.confirm('Delete "' + name + '"? This cannot be undone.')) {
+        return;
+      }
+      fetch('/api/shortcuts/' + id, { method: 'DELETE' })
+        .then(function(res) {
+          if (res.status === 204 || res.ok) {
+            showStatus('Shortcut deleted.', 'success');
+            loadShortcuts();
+          } else {
+            throw new Error('HTTP ' + res.status);
+          }
+        })
+        .catch(function(err) {
+          showStatus('Failed to delete shortcut: ' + err.message, 'error');
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      loadShortcuts();
+    });
+  </script>
+</body>
+</html>
