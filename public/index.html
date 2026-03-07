@@ -248,6 +248,29 @@
       line-height: 1.2;
     }
 
+    /* My Computer window */
+    #my-computer-window {
+      position: fixed;
+      min-width: 360px;
+      z-index: 500;
+    }
+
+    .mycomp-table {
+      width: 100%;
+      font-family: monospace;
+      font-size: 11px;
+      border-collapse: collapse;
+    }
+
+    .mycomp-table td {
+      padding: 2px 8px;
+    }
+
+    .mycomp-table td:first-child {
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
     /* Mobile fallback */
     @media (max-width: 768px) {
       html, body {
@@ -319,6 +342,34 @@
   <div id="desktop">
     <div id="icon-grid">
       <!-- Icons will be populated by JS -->
+    </div>
+  </div>
+
+  <!-- My Computer System Stats Window -->
+  <div id="my-computer-window" class="window" style="display:none; top:60px; left:100px;">
+    <div class="title-bar">
+      <div class="title-bar-text">My Computer</div>
+      <div class="title-bar-controls">
+        <button aria-label="Minimize"></button>
+        <button aria-label="Close"></button>
+      </div>
+    </div>
+    <div class="window-body">
+      <div id="mycomp-loading">Loading...</div>
+      <div id="mycomp-stats" style="display:none;">
+        <table class="mycomp-table">
+          <tbody>
+            <tr><td>Hostname</td><td id="mc-hostname">—</td></tr>
+            <tr><td>Uptime</td><td id="mc-uptime">—</td></tr>
+            <tr><td>CPU Model</td><td id="mc-cpu-model">—</td></tr>
+            <tr><td>CPU Cores</td><td id="mc-cpu-cores">—</td></tr>
+            <tr><td>Load Avg</td><td id="mc-loadavg">—</td></tr>
+            <tr><td>Memory</td><td id="mc-memory">—</td></tr>
+            <tr><td>Disk</td><td id="mc-disk">—</td></tr>
+            <tr><td>OS</td><td id="mc-os">—</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 
