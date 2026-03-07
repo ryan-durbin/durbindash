@@ -56,10 +56,22 @@ app.get('/api/reddit', async (req, res) => {
 
 app.use('/api/openclaw', openclawRouter);
 
+// Admin redirect
+app.get('/admin', (req, res) => res.sendFile(path.join(__dirname, 'public', 'admin.html')));
+
+// API routes
+const shortcutsRouter = require('./src/routes/shortcuts');
+app.use('/api/shortcuts', shortcutsRouter);
+
+// System stats
+const systemRouter = require('./server/system');
+app.use('/api/system', systemRouter);
+
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+// Start server only when run directly
 if (require.main === module) {
   app.listen(PORT, () => {
     console.log(`DurbinDash running on http://localhost:${PORT}`);
