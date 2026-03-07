@@ -50,6 +50,51 @@
     if (existing && existing.parentNode) existing.parentNode.removeChild(existing);
   }
 
+  // --- Stats loading ---
+  function fetchSystemStats() {
+    return fetch('/api/system').then(function (r) { return r.json(); });
+  }
+
+  function fetchAndDisplayStats() {
+    var loading = document.getElementById('mycomp-loading');
+    var stats = document.getElementById('mycomp-stats');
+
+    if (loading) { loading.style.display = 'block'; loading.textContent = 'Loading...'; }
+    if (stats) stats.style.display = 'none';
+
+    return fetchSystemStats()
+      .then(function (data) {
+        if (loading) loading.style.display = 'none';
+        if (stats) stats.style.display = 'block';
+        function set(id, val) {
+          var el = document.getElementById(id);
+          if (el) el.textContent = val;
+        }
+        set('mc-hostname', data.hostname);
+        set('mc-uptime', data.uptime);
+        set('mc-cpu-model', data.cpu.model);
+        set('mc-cpu-cores', data.cpu.cores);
+        set('mc-loadavg', data.cpu.loadavg.map(function (n) { return n.toFixed(2); }).join(' / '));
+        set('mc-memory',
+          data.memory.used.toFixed(1) + ' GB used / ' + data.memory.total.toFixed(1) + ' GB total'
+        );
+        set('mc-disk',
+          data.disk.used.toFixed(1) + ' GB used / ' + data.disk.total.toFixed(1) + ' GB total'
+        );
+        set('mc-os', data.os.platform + ' ' + data.os.arch + ' kernel ' + data.os.release);
+      })
+      .catch(function (e) {
+        if (loading) {
+          loading.style.display = 'block';
+          loading.textContent = 'Error loading stats';
+        }
+        console.error('Failed to load system stats', e);
+      });
+  }
+
+  // Keep loadSystemStats as an alias for backward compatibility
+  var loadSystemStats = fetchAndDisplayStats;
+
   // --- Core window actions ---
   function openMyComputer() {
     myComputerOpen = true;
@@ -60,10 +105,12 @@
       win.style.zIndex = '500';
     }
     updateTaskbar();
-    loadSystemStats();
-    if (!statsRefreshInterval) {
-      statsRefreshInterval = setInterval(loadSystemStats, 30000);
+    fetchAndDisplayStats();
+    if (statsRefreshInterval) {
+      clearInterval(statsRefreshInterval);
+      statsRefreshInterval = null;
     }
+    statsRefreshInterval = setInterval(fetchAndDisplayStats, 30000);
   }
 
   function closeMyComputer() {
@@ -82,6 +129,10 @@
     myComputerMinimized = true;
     var win = getWindow();
     if (win) win.style.display = 'none';
+    if (statsRefreshInterval) {
+      clearInterval(statsRefreshInterval);
+      statsRefreshInterval = null;
+    }
     updateTaskbar();
   }
 
@@ -93,43 +144,12 @@
       win.style.zIndex = '500';
     }
     updateTaskbar();
-  }
-
-  // --- Stats loading ---
-  function loadSystemStats() {
-    var loading = document.getElementById('mycomp-loading');
-    var stats = document.getElementById('mycomp-stats');
-
-    fetch('/api/system')
-      .then(function (r) { return r.json(); })
-      .then(function (data) {
-        if (loading) loading.style.display = 'none';
-        if (stats) stats.style.display = 'block';
-        function set(id, val) {
-          var el = document.getElementById(id);
-          if (el) el.textContent = val;
-        }
-        set('mc-hostname', data.hostname);
-        set('mc-uptime', data.uptime);
-        set('mc-cpu-model', data.cpu.model);
-        set('mc-cpu-cores', data.cpu.cores);
-        set('mc-loadavg', data.cpu.loadavg.map(function (n) { return n.toFixed(2); }).join(' / '));
-        set('mc-memory',
-          'Total: ' + data.memory.total.toFixed(1) + ' GB | ' +
-          'Used: ' + data.memory.used.toFixed(1) + ' GB | ' +
-          'Free: ' + data.memory.free.toFixed(1) + ' GB'
-        );
-        set('mc-disk',
-          'Total: ' + data.disk.total.toFixed(1) + ' GB | ' +
-          'Used: ' + data.disk.used.toFixed(1) + ' GB | ' +
-          'Free: ' + data.disk.free.toFixed(1) + ' GB'
-        );
-        set('mc-os', data.os.platform + ' ' + data.os.release + ' (' + data.os.arch + ')');
-      })
-      .catch(function (e) {
-        if (loading) loading.textContent = 'Error loading stats.';
-        console.error('Failed to load system stats', e);
-      });
+    fetchAndDisplayStats();
+    if (statsRefreshInterval) {
+      clearInterval(statsRefreshInterval);
+      statsRefreshInterval = null;
+    }
+    statsRefreshInterval = setInterval(fetchAndDisplayStats, 30000);
   }
 
   // --- Drag by title bar ---
@@ -208,6 +228,8 @@
       updateTaskbar: updateTaskbar,
       addTaskbarButton: addTaskbarButton,
       removeTaskbarButton: removeTaskbarButton,
+      fetchSystemStats: fetchSystemStats,
+      fetchAndDisplayStats: fetchAndDisplayStats,
       loadSystemStats: loadSystemStats,
       setupDrag: setupDrag,
       init: init,
