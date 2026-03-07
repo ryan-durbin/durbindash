@@ -1,97 +1,643 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <title>DurbinDash - Ryan's Personal Portal</title>
-  <link rel='stylesheet' href='styles.css'>
-  <link rel='stylesheet' href='/css/news.css'>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DurbinDash</title>
+  <link rel="stylesheet" href="https://unpkg.com/98.css">
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #008080;
+      font-family: 'Pixelated MS Sans Serif', Arial, sans-serif;
+    }
+
+    #desktop {
+      position: relative;
+      width: 100%;
+      height: calc(100vh - 28px);
+      overflow: hidden;
+      padding: 8px;
+    }
+
+    /* Taskbar */
+    #taskbar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 28px;
+      background-color: #c0c0c0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 9999;
+      border-top: 2px solid #ffffff;
+      padding: 2px 4px;
+    }
+
+    #taskbar-left {
+      display: flex;
+      align-items: center;
+    }
+
+    #taskbar-right {
+      display: flex;
+      align-items: center;
+    }
+
+    /* Desktop right-click context menu */
+    #desktop-context-menu {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      background: #c0c0c0;
+      border-top: 2px solid #ffffff;
+      border-left: 2px solid #ffffff;
+      border-right: 2px solid #808080;
+      border-bottom: 2px solid #808080;
+      box-shadow: 2px 2px 0 #000000;
+      min-width: 160px;
+      padding: 2px;
+      font-size: 12px;
+      font-family: 'Arial', sans-serif;
+    }
+    #desktop-context-menu .ctx-item {
+      padding: 3px 20px 3px 24px;
+      cursor: default;
+      white-space: nowrap;
+      color: #000;
+    }
+    #desktop-context-menu .ctx-item:hover {
+      background: #000080;
+      color: #fff;
+    }
+    #desktop-context-menu .ctx-separator {
+      height: 1px;
+      background: #808080;
+      margin: 2px 2px;
+      border-top: 1px solid #fff;
+    }
+
+    #start-button {
+      font-weight: bold;
+      font-size: 12px;
+      padding: 2px 6px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+
+    /* System tray / clock */
+    #system-tray {
+      border: 1px inset #808080;
+      padding: 2px 8px;
+      font-size: 11px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      background-color: #c0c0c0;
+      min-width: 60px;
+      justify-content: center;
+    }
+
+    /* Start Menu */
+    #start-menu {
+      display: none;
+      position: fixed;
+      bottom: 28px;
+      left: 0;
+      width: 200px;
+      background-color: #c0c0c0;
+      border: 2px solid;
+      border-color: #ffffff #808080 #808080 #ffffff;
+      z-index: 99999;
+      box-shadow: 2px 2px 0 #000;
+    }
+
+    #start-menu.open {
+      display: block;
+    }
+
+    #start-menu-header {
+      background: linear-gradient(to bottom, #000080, #1084d0);
+      color: white;
+      font-weight: bold;
+      font-size: 13px;
+      padding: 6px 8px;
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      transform: rotate(180deg);
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 28px;
+      display: flex;
+      align-items: center;
+      letter-spacing: 2px;
+    }
+
+    #start-menu-items {
+      margin-left: 28px;
+      padding: 4px 0;
+    }
+
+    .start-menu-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 12px;
+      cursor: pointer;
+      font-size: 12px;
+      text-decoration: none;
+      color: #000;
+      white-space: nowrap;
+    }
+
+    .start-menu-item:hover {
+      background-color: #000080;
+      color: #ffffff;
+      text-decoration: none;
+    }
+
+    .start-menu-item .menu-icon {
+      font-size: 16px;
+      width: 20px;
+      text-align: center;
+    }
+
+    .start-menu-separator {
+      height: 1px;
+      background-color: #808080;
+      margin: 4px 8px;
+      border-top: 1px solid #ffffff;
+    }
+
+    /* Desktop icons */
+    #icon-grid {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    .desktop-icon {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 72px;
+      cursor: pointer;
+      padding: 4px;
+      user-select: none;
+      border: 1px solid transparent;
+    }
+
+    .desktop-icon.dragging {
+      opacity: 0.8;
+      z-index: 1000;
+      cursor: grabbing;
+    }
+
+    .desktop-icon:hover {
+      background-color: rgba(0, 0, 128, 0.3);
+      outline: 1px dotted rgba(255,255,255,0.5);
+    }
+
+    .desktop-icon.selected {
+      background-color: rgba(0, 0, 128, 0.5);
+      outline: 1px dotted white;
+    }
+
+    .desktop-icon .icon-img {
+      font-size: 32px;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      image-rendering: pixelated;
+    }
+
+    .desktop-icon .icon-img .icon-url-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      image-rendering: pixelated;
+      display: block;
+    }
+
+    .desktop-icon .icon-label {
+      color: #ffffff;
+      font-size: 11px;
+      text-align: center;
+      text-shadow: 1px 1px 1px #000000, -1px -1px 1px #000000, 1px -1px 1px #000000, -1px 1px 1px #000000;
+      margin-top: 2px;
+      word-break: break-word;
+      max-width: 72px;
+      line-height: 1.2;
+    }
+
+    /* Mobile fallback */
+    @media (max-width: 768px) {
+      html, body {
+        overflow: auto;
+        height: auto;
+        min-height: 100vh;
+        background-color: #008080;
+      }
+
+      #desktop {
+        height: auto;
+        min-height: calc(100vh - 40px);
+        overflow: visible;
+        padding-bottom: 48px;
+      }
+
+      #icon-grid {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-content: flex-start;
+        gap: 16px;
+        padding: 16px;
+        height: auto;
+        position: static;
+      }
+
+      .desktop-icon {
+        position: static;
+        width: 80px;
+      }
+
+      .desktop-icon .icon-img {
+        font-size: 40px;
+        width: 56px;
+        height: 56px;
+      }
+
+      .desktop-icon .icon-label {
+        font-size: 12px;
+      }
+
+      #taskbar {
+        position: fixed;
+        bottom: 0;
+        height: 40px;
+      }
+
+      #start-button {
+        height: 32px;
+        font-size: 14px;
+      }
+
+      #system-tray {
+        font-size: 13px;
+        height: 32px;
+        padding: 2px 10px;
+      }
+
+      #start-menu {
+        bottom: 40px;
+        width: 240px;
+      }
+    }
+  </style>
 </head>
 <body>
 
-<header id="site-banner">
-  <span class="banner-text">WELCOME TO DURBINDASH :: YOUR PERSONAL WEB PORTAL :: EST. 2026</span>
-</header>
-
-<main id="grid-layout">
-
-  <!-- ROW 1: WEATHER | AI NEWS -->
-  <div class="grid-cell" style="background-color:#003366;">
-    <section>
-      <h2 class="section-header">&#9728; WEATHER</h2>
-      <div id="weather-content">
-        <p style="color:#ffffff;font-family:Arial,sans-serif;font-size:13px;">
-          Loading weather data...<br>
-          <em>Anchorage, AK</em>
-        </p>
-      </div>
-    </section>
-  </div>
-
-  <div class="grid-cell" style="background-color:#004040;">
-    <section>
-      <h2 class="section-header">
-        &#128200; AI NEWS
-      </h2>
-      <div id="news-ai">
-        <p style="color:#ffffff;font-family:Arial,sans-serif;font-size:13px;">
-          Loading latest AI news...
-        </p>
-      </div>
-    </section>
-  </div>
-
-  <!-- ROW 2: TECH NEWS (Ars Technica + The Verge) -->
-  <div class="grid-cell grid-full" style="background-color:#002244;">
-    <section>
-      <h2 class="section-header">&#128187; TECH NEWS (ARS TECHNICA + THE VERGE)</h2>
-      <div id="news-tech">
-        <p style="color:#ffffff;font-family:Arial,sans-serif;font-size:13px;">
-          Loading tech news...
-        </p>
-      </div>
-    </section>
-  </div>
-
-  <!-- ROW 3: HACKER NEWS -->
-  <div class="grid-cell grid-full" style="background-color:#333300;">
-    <section>
-      <h2 class="section-header">
-        &#128293; HACKER NEWS
-      </h2>
-      <div id="news-hn">
-        <p style="color:#ffffff;font-family:Arial,sans-serif;font-size:13px;">
-          Loading Hacker News...
-        </p>
-      </div>
-    </section>
-  </div>
-
-  <!-- ROW 4: MY STUFF app portal -->
-  <div class="grid-cell grid-full" style="background-color:#800080;text-align:center;">
-    <section>
-      <h2 class="section-header">&#9733; MY STUFF &#9733; YOUR PERSONAL APP PORTAL &#9733;</h2>
-      <div id="app-portal" style="padding:10px;">
-        <a href="http://10.0.1.132:8123" class="portal-btn" target="_blank" aria-label="Open Home Assistant">&#127968; Home Assistant</a>
-        <a href="http://10.0.1.132:7747" class="portal-btn" target="_blank" aria-label="Open ClawStats">&#128202; ClawStats</a>
-        <a href="http://10.0.1.132:5678" class="portal-btn" target="_blank" aria-label="Open n8n">&#9881; n8n</a>
-        <a href="http://10.0.1.132:3333" class="portal-btn" target="_blank" aria-label="Open Antfarm">&#127807; Antfarm</a>
-        <a href="http://10.0.1.132:8080" class="portal-btn" target="_blank" aria-label="Open Vaultwarden">&#128272; Vaultwarden</a>
-        <a href="http://10.0.1.132:2283" class="portal-btn" target="_blank" aria-label="Open Immich">&#128247; Immich</a>
-      </div>
-    </section>
-  </div>
-
-  <!-- ROW 5: News refresh status -->
-  <div class="grid-cell grid-full" style="background-color:#1a1a2e;text-align:center;">
-    <div class="refresh-status" style="color:#aaaaaa;font-family:Arial,sans-serif;font-size:11px;padding:4px;">
-      News last refreshed: <span id="last-refresh">--</span>
+  <div id="desktop">
+    <div id="icon-grid">
+      <!-- Icons will be populated by JS -->
     </div>
   </div>
 
-</main>
+  <!-- Taskbar -->
+  <div id="taskbar">
+    <div id="taskbar-left">
+      <button id="start-button" class="button" onclick="toggleStartMenu()">
+        <span>🏁</span> Start
+      </button>
+    </div>
+    <div id="taskbar-right">
+      <div id="system-tray">
+        <span id="clock">12:00 PM</span>
+      </div>
+    </div>
+  </div>
 
-<script src="app.js"></script>
-<script src="/js/news.js"></script>
+  <!-- Desktop right-click context menu -->
+  <div id="desktop-context-menu">
+    <div class="ctx-item" onclick="resetIconPositions(); hideContextMenu();">Arrange Icons</div>
+    <div class="ctx-separator"></div>
+    <div class="ctx-item" onclick="hideContextMenu(); window.location.reload();">Refresh</div>
+  </div>
+
+  <!-- Start Menu -->
+  <div id="start-menu">
+    <div id="start-menu-header">DurbinDash</div>
+    <div id="start-menu-items">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+
+  <script>
+    // Detect mobile (used for disabling drag on touch devices)
+    function isMobile() {
+      return window.innerWidth <= 768;
+    }
+
+    // Live clock
+    function updateClock() {
+      const now = new Date();
+      let hours = now.getHours();
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12 || 12;
+      document.getElementById('clock').textContent = `${hours}:${minutes} ${ampm}`;
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    // Icon position persistence
+    var ICON_POSITIONS_KEY = 'durbindash-icon-positions';
+    var ICON_WIDTH = 72;
+    var ICON_HEIGHT = 88;
+    var ICON_GAP = 8;
+    var ICON_PADDING = 8;
+    var SNAP_COL = ICON_WIDTH + ICON_GAP;   // 80px horizontal cell
+    var SNAP_ROW = ICON_HEIGHT + ICON_GAP;  // 96px vertical cell
+
+    function snapToGrid(left, top) {
+      // Snap relative to ICON_PADDING origin so grid aligns with default layout
+      var snappedLeft = Math.round((left - ICON_PADDING) / SNAP_COL) * SNAP_COL + ICON_PADDING;
+      var snappedTop  = Math.round((top  - ICON_PADDING) / SNAP_ROW) * SNAP_ROW + ICON_PADDING;
+      return { left: snappedLeft, top: snappedTop };
+    }
+
+    function loadIconPositions() {
+      try {
+        return JSON.parse(localStorage.getItem(ICON_POSITIONS_KEY)) || {};
+      } catch (e) {
+        return {};
+      }
+    }
+
+    function saveIconPositions(positions) {
+      localStorage.setItem(ICON_POSITIONS_KEY, JSON.stringify(positions));
+    }
+
+    function resetIconPositions() {
+      localStorage.removeItem(ICON_POSITIONS_KEY);
+      // Re-render with default positions
+      fetch('/api/shortcuts').then(r => r.json()).then(function(shortcuts) {
+        renderDesktop(shortcuts);
+      });
+    }
+
+    function getDefaultPosition(index) {
+      var desktop = document.getElementById('desktop');
+      var desktopHeight = desktop.clientHeight || window.innerHeight - 28;
+      var iconsPerCol = Math.max(1, Math.floor((desktopHeight - ICON_PADDING * 2) / (ICON_HEIGHT + ICON_GAP)));
+      var col = Math.floor(index / iconsPerCol);
+      var row = index % iconsPerCol;
+      return {
+        left: ICON_PADDING + col * (ICON_WIDTH + ICON_GAP),
+        top: ICON_PADDING + row * (ICON_HEIGHT + ICON_GAP)
+      };
+    }
+
+    function clampPosition(left, top, iconEl) {
+      var desktop = document.getElementById('desktop');
+      var maxLeft = desktop.clientWidth - iconEl.offsetWidth;
+      var maxTop = desktop.clientHeight - iconEl.offsetHeight;
+      return {
+        left: Math.max(0, Math.min(left, maxLeft)),
+        top: Math.max(0, Math.min(top, maxTop))
+      };
+    }
+
+    function makeDraggable(icon, id) {
+      // Disable dragging on mobile
+      if (isMobile()) return;
+
+      var isDragging = false;
+      var startX, startY, startLeft, startTop;
+
+      icon.addEventListener('mousedown', function(e) {
+        // Disable dragging on mobile
+        if (isMobile()) return;
+        // Only drag with left mouse button
+        if (e.button !== 0) return;
+
+        isDragging = false;
+        startX = e.clientX;
+        startY = e.clientY;
+        startLeft = parseInt(icon.style.left) || 0;
+        startTop = parseInt(icon.style.top) || 0;
+
+        function onMouseMove(e) {
+          var dx = e.clientX - startX;
+          var dy = e.clientY - startY;
+          // Start dragging after 4px movement to allow click
+          if (!isDragging && (Math.abs(dx) > 4 || Math.abs(dy) > 4)) {
+            isDragging = true;
+            icon.classList.add('dragging');
+          }
+          if (isDragging) {
+            e.preventDefault();
+            var newLeft = startLeft + dx;
+            var newTop = startTop + dy;
+            var clamped = clampPosition(newLeft, newTop, icon);
+            icon.style.left = clamped.left + 'px';
+            icon.style.top = clamped.top + 'px';
+          }
+        }
+
+        function onMouseUp() {
+          document.removeEventListener('mousemove', onMouseMove);
+          document.removeEventListener('mouseup', onMouseUp);
+          if (isDragging) {
+            icon.classList.remove('dragging');
+            isDragging = false;
+            // Snap to grid on drop
+            var snapped = snapToGrid(parseInt(icon.style.left), parseInt(icon.style.top));
+            var clamped2 = clampPosition(snapped.left, snapped.top, icon);
+            icon.style.left = clamped2.left + 'px';
+            icon.style.top = clamped2.top + 'px';
+            // Save updated positions to localStorage
+            var positions = loadIconPositions();
+            positions[id] = {
+              left: parseInt(icon.style.left),
+              top: parseInt(icon.style.top)
+            };
+            saveIconPositions(positions);
+          }
+        }
+
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+      });
+    }
+
+    // Load shortcuts from API and render desktop
+    async function loadShortcuts() {
+      try {
+        const res = await fetch('/api/shortcuts');
+        const shortcuts = await res.json();
+        renderDesktop(shortcuts);
+        renderStartMenu(shortcuts);
+      } catch (e) {
+        console.error('Failed to load shortcuts', e);
+      }
+    }
+
+    function isIconUrl(icon) {
+      return /^https?:\/\/|^\//.test(icon);
+    }
+
+    function renderDesktop(shortcuts) {
+      const grid = document.getElementById('icon-grid');
+      grid.innerHTML = '';
+      var savedPositions = loadIconPositions();
+      shortcuts.forEach(function(sc, index) {
+        const icon = document.createElement('div');
+        icon.className = 'desktop-icon';
+        icon.dataset.id = sc.id;
+        icon.dataset.url = sc.url;
+        const iconContent = isIconUrl(sc.icon)
+          ? `<img src="${sc.icon}" alt="${sc.name}" class="icon-url-img">`
+          : sc.icon;
+        icon.innerHTML = `
+          <div class="icon-img">${iconContent}</div>
+          <div class="icon-label">${sc.name}</div>
+        `;
+
+        // Apply saved or default position
+        var pos = savedPositions[sc.id] || getDefaultPosition(index);
+        icon.style.left = pos.left + 'px';
+        icon.style.top = pos.top + 'px';
+
+        // Double-click to open (desktop), single tap to open (mobile)
+        icon.addEventListener('dblclick', () => {
+          window.open(sc.url, '_blank');
+        });
+        // Single-click: select on desktop, open on mobile
+        icon.addEventListener('click', () => {
+          if (isMobile()) {
+            window.open(sc.url, '_blank');
+          } else {
+            document.querySelectorAll('.desktop-icon').forEach(el => el.classList.remove('selected'));
+            icon.classList.add('selected');
+          }
+        });
+
+        // Make draggable (desktop only)
+        makeDraggable(icon, sc.id);
+
+        grid.appendChild(icon);
+      });
+    }
+
+    function renderStartMenu(shortcuts) {
+      const items = document.getElementById('start-menu-items');
+      items.innerHTML = '';
+
+      shortcuts.forEach(sc => {
+        const a = document.createElement('a');
+        a.className = 'start-menu-item';
+        a.href = sc.url;
+        a.target = '_blank';
+        const menuIconContent = isIconUrl(sc.icon)
+          ? `<img src="${sc.icon}" alt="${sc.name}" class="icon-url-img" style="width:20px;height:20px;object-fit:contain;vertical-align:middle;">`
+          : sc.icon;
+        a.innerHTML = `<span class="menu-icon">${menuIconContent}</span> ${sc.name}`;
+        a.addEventListener('click', closeStartMenu);
+        items.appendChild(a);
+      });
+
+      // Separator + Manage Shortcuts
+      const sep = document.createElement('div');
+      sep.className = 'start-menu-separator';
+      items.appendChild(sep);
+
+      const manage = document.createElement('a');
+      manage.className = 'start-menu-item';
+      manage.href = '/admin';
+      manage.innerHTML = `<span class="menu-icon">⚙️</span> Manage Shortcuts`;
+      manage.addEventListener('click', closeStartMenu);
+      items.appendChild(manage);
+    }
+
+    // Start menu toggle
+    function toggleStartMenu() {
+      const menu = document.getElementById('start-menu');
+      menu.classList.toggle('open');
+    }
+
+    function closeStartMenu() {
+      document.getElementById('start-menu').classList.remove('open');
+    }
+
+    // Close start menu on outside click
+    document.addEventListener('click', (e) => {
+      const menu = document.getElementById('start-menu');
+      const startBtn = document.getElementById('start-button');
+      if (!menu.contains(e.target) && !startBtn.contains(e.target)) {
+        closeStartMenu();
+      }
+    });
+
+    // Deselect icons on desktop click
+    document.getElementById('desktop').addEventListener('click', (e) => {
+      if (e.target === document.getElementById('desktop') || e.target === document.getElementById('icon-grid')) {
+        document.querySelectorAll('.desktop-icon').forEach(el => el.classList.remove('selected'));
+      }
+    });
+
+    // Desktop right-click context menu
+    function hideContextMenu() {
+      document.getElementById('desktop-context-menu').style.display = 'none';
+    }
+
+    document.getElementById('desktop').addEventListener('contextmenu', function(e) {
+      // Only trigger on bare desktop (not on icons or taskbar)
+      var target = e.target;
+      if (target.closest('.desktop-icon') || target.closest('#taskbar') || target.closest('#start-menu')) return;
+      e.preventDefault();
+      var menu = document.getElementById('desktop-context-menu');
+      var x = e.clientX;
+      var y = e.clientY;
+      // Keep menu inside viewport
+      menu.style.display = 'block';
+      var mw = menu.offsetWidth;
+      var mh = menu.offsetHeight;
+      if (x + mw > window.innerWidth) x = window.innerWidth - mw - 4;
+      if (y + mh > window.innerHeight) y = window.innerHeight - mh - 4;
+      menu.style.left = x + 'px';
+      menu.style.top = y + 'px';
+    });
+
+    // Hide context menu on any click elsewhere
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('#desktop-context-menu')) hideContextMenu();
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') hideContextMenu();
+    });
+
+    // Initialize on DOMContentLoaded
+    document.addEventListener('DOMContentLoaded', loadShortcuts);
+  </script>
 </body>
 </html>
