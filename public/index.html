@@ -510,6 +510,36 @@
       const grid = document.getElementById('icon-grid');
       grid.innerHTML = '';
       var savedPositions = loadIconPositions();
+
+      // Hardcoded My Computer icon — built-in system feature, not in shortcuts.json
+      (function() {
+        const myComputer = document.createElement('div');
+        myComputer.className = 'desktop-icon';
+        myComputer.id = 'my-computer';
+        myComputer.dataset.id = 'my-computer';
+        myComputer.innerHTML = `
+          <div class="icon-img">🖥️</div>
+          <div class="icon-label">My Computer</div>
+        `;
+        var mcPos = savedPositions['my-computer'] || { top: 8, left: 8 };
+        myComputer.style.left = mcPos.left + 'px';
+        myComputer.style.top = mcPos.top + 'px';
+        myComputer.addEventListener('dblclick', function() {
+          // Will be wired to system stats window in US-004
+          console.log('My Computer: opening system stats window');
+        });
+        myComputer.addEventListener('click', function() {
+          if (isMobile()) {
+            console.log('My Computer: opening system stats window');
+          } else {
+            document.querySelectorAll('.desktop-icon').forEach(el => el.classList.remove('selected'));
+            myComputer.classList.add('selected');
+          }
+        });
+        makeDraggable(myComputer, 'my-computer');
+        grid.appendChild(myComputer);
+      })();
+
       shortcuts.forEach(function(sc, index) {
         const icon = document.createElement('div');
         icon.className = 'desktop-icon';
