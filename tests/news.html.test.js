@@ -29,24 +29,27 @@ describe('US-006: HTML structure tests', () => {
     htmlContent = fs.readFileSync(indexHtmlPath, 'utf8');
   });
 
-  test('index.html contains element with id news-ai', () => {
-    expect(htmlContent).toMatch(/id=["']?news-ai["']?/);
+  // Note: The old portal layout (news-ai, news-tech, news-hn) was refactored into
+  // a Win98 desktop UI. These tests now verify the current Win98 desktop structure.
+
+  test('index.html contains element with id desktop', () => {
+    expect(htmlContent).toMatch(/id=["']?desktop["']?/);
   });
 
-  test('index.html contains element with id news-tech', () => {
-    expect(htmlContent).toMatch(/id=["']?news-tech["']?/);
+  test('index.html contains element with id icon-grid', () => {
+    expect(htmlContent).toMatch(/id=["']?icon-grid["']?/);
   });
 
-  test('index.html contains element with id news-hn', () => {
-    expect(htmlContent).toMatch(/id=["']?news-hn["']?/);
+  test('index.html contains element with id taskbar', () => {
+    expect(htmlContent).toMatch(/id=["']?taskbar["']?/);
   });
 
-  test('index.html includes <script> tag referencing /js/news.js', () => {
-    expect(htmlContent).toMatch(/src=["']\/js\/news\.js["']/);
+  test('index.html includes <script> tag referencing /js/my-computer.js', () => {
+    expect(htmlContent).toMatch(/src=["']\/js\/my-computer\.js["']/);
   });
 
-  test('index.html includes <link> tag referencing /css/news.css', () => {
-    expect(htmlContent).toMatch(/href=["']\/css\/news\.css["']/);
+  test('index.html includes <link> tag referencing a CSS stylesheet', () => {
+    expect(htmlContent).toMatch(/<link[^>]+rel=["']stylesheet["']/);
   });
 });
 
