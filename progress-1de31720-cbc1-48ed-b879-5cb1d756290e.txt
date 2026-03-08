@@ -1,0 +1,41 @@
+# Progress Log
+Run: 1de31720-cbc1-48ed-b879-5cb1d756290e
+Task: DurbinDash — Fix 4 Pre-Existing Test Failures
+Started: 2026-03-08
+
+## Codebase Patterns
+- Stack: Node.js/Express backend, plain HTML/CSS/JS frontend with 98.css library
+- Test runner: Jest (npx jest or npm test), test files in tests/
+- Production files: public/index.html, public/styles.css, public/*.js
+- Current UI: Windows 98 desktop UI — NOT the old portal layout
+  - Key IDs: desktop, taskbar, icon-grid, mycomp-stats, start-menu, system-tray, clock
+  - Tables ARE used in My Computer window (mycomp-stats) for system stats — intentional/valid
+  - No site-banner, no grid-layout, no weather-content/news-ai/news-tech/news-hn/app-portal IDs
+- styles.css is the OLD portal CSS (has shimmer, site-banner, grid-layout rules) but index.html is the new Win98 UI
+  - Both files coexist — styles.css rules for old portal layout still exist but aren't used by current index.html
+- Git: branch bugfix/fix-legacy-test-failures, cut from main
+
+---
+
+## 2026-03-08 - US-002: Fix news.html.test.js (5 failures)
+- Updated 'US-006: HTML structure tests' describe block — old portal IDs (news-ai, news-tech, news-hn) were refactored away
+- Replaced 5 failing tests with checks for actual Win98 desktop elements: desktop, icon-grid, taskbar, /js/my-computer.js script, link stylesheet
+- 6 CSS and static-serving tests already passed — unchanged
+- Result: 11 tests pass, 0 failures
+- Files changed: tests/news.html.test.js
+- **Learnings:** index.html has only one JS file: /js/my-computer.js. The link tag uses 98.css CDN + no local CSS link. The stylesheet check uses a generic regex for any rel=stylesheet link.
+---
+
+## 2026-03-08 - US-001: Create branch and fix nielsen-p1.test.js (8 failures)
+- Branch bugfix/fix-legacy-test-failures already existed — no need to cut
+- Ran npx jest tests/nielsen-p1.test.js: confirmed 8 failures
+- Updated tests/nielsen-p1.test.js to match actual Win98 desktop UI:
+  1. Replaced section ID check (weather-content etc.) → Win98 IDs (desktop, taskbar, icon-grid)
+  2. Removed site-banner/banner-text checks (not in current index.html)
+  3. Removed "no table" checks — My Computer window uses tables for tabular data (intentional)
+  4. Removed grid-layout ID check — Win98 UI has different structure
+  5. Added positive test: tables ARE present in mycomp-stats (documents intentional use)
+- Result: 13 tests pass, 0 failures
+- Files changed: tests/nielsen-p1.test.js
+- **Learnings:** styles.css has old portal CSS rules that tests reference (shimmer, grid, Comic Sans) — those rules still pass because styles.css wasn't changed. Only index.html layout changed from portal to Win98 desktop.
+---
